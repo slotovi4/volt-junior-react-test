@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import { getAllProducts, deteleProduct } from "../../actions/productsActions";
 
 // components
-import ProductsCreate from "../ProductsCreate/ProductsCreate";
-import ProductsChange from "../ProductsChange/ProductsChange";
+import ProductsCreate from "./ProductsCreate/ProductsCreate";
+import ProductsChange from "./ProductsChange/ProductsChange";
 
 class Products extends React.Component {
   state = {

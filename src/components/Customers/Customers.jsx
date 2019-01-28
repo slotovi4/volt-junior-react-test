@@ -7,8 +7,8 @@ import {
 import { cn } from "@bem-react/classname";
 
 // components
-import CustomersCreate from "../CustomersCreate/CustomersCreate";
-import CustomersChange from "../CustomersChange/CustomersChange";
+import CustomersCreate from "./CustomersCreate/CustomersCreate";
+import CustomersChange from "./CustomersChange/CustomersChange";
 
 class Customers extends React.Component {
   state = {
@@ -49,7 +49,7 @@ class Customers extends React.Component {
             <tr>
               <td>#</td>
               <td>Name</td>
-              <td>Price</td>
+              <td>Address</td>
             </tr>
           </thead>
           <tbody>

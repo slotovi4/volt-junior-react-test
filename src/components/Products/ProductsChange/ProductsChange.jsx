@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { changeProduct } from "../../actions/productsActions";
+import { changeProduct } from "../../../actions/productsActions";
 
 class ProductsChange extends React.Component {
   state = {

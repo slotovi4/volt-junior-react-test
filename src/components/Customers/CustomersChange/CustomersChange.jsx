@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { changeCustomer } from "../../actions/customersActions";
+import { changeCustomer } from "../../../actions/customersActions";
 
 class CustomersChange extends React.Component {
   state = {
@@ -43,9 +43,10 @@ class CustomersChange extends React.Component {
             defaultValue={address}
           />
           <input
-            type="text"
+            type="tel"
             name="phone"
-            placeholder="Customer phone..."
+            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            placeholder="Customer phone xxx-xxx-xxxx"
             onChange={this.changeInput}
             required
             defaultValue={phone}
