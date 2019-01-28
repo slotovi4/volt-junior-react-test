@@ -1,26 +1,38 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { createNewCustomer } from "../../actions/customersActions";
+import { changeCustomer } from "../../actions/customersActions";
 
-class CustomersCreate extends React.Component {
+class CustomersChange extends React.Component {
   state = {
     name: "",
     address: "",
     phone: ""
   };
 
+  async componentDidMount() {
+    const { customer } = this.props;
+
+    this.setState({
+      name: customer.name,
+      address: customer.address,
+      phone: customer.phone
+    });
+  }
+
   render() {
     const { close } = this.props;
+    const { name, address, phone } = this.state;
 
     return (
       <div>
-        <form onSubmit={this.createCustomer}>
+        <form onSubmit={this.change}>
           <input
             type="text"
             name="name"
             placeholder="Customer name..."
             onChange={this.changeInput}
             required
+            defaultValue={name}
           />
           <input
             type="text"
@@ -28,6 +40,7 @@ class CustomersCreate extends React.Component {
             placeholder="Customer address..."
             onChange={this.changeInput}
             required
+            defaultValue={address}
           />
           <input
             type="text"
@@ -35,43 +48,38 @@ class CustomersCreate extends React.Component {
             placeholder="Customer phone..."
             onChange={this.changeInput}
             required
+            defaultValue={phone}
           />
-          <input type="submit" value="Create" />
+          <input type="submit" value="Change" />
         </form>
         <span onClick={() => close()}>Close</span>
       </div>
     );
   }
 
-  changeInput = e => {
-    const value = e.target.value;
-    const name = e.target.name;
-
-    this.setState({ [name]: value });
-  };
-
-  createCustomer = e => {
+  change = e => {
     e.preventDefault();
+    const { customer } = this.props;
     const { name, address, phone } = this.state;
-    const { customers } = this.props;
-    const newCustomer = {};
 
-    // get current date
-    const createDate = this.getCurrentDate();
+    if (
+      name !== customer.name ||
+      address !== customer.address ||
+      phone !== customer.phone
+    ) {
+      const currentDate = this.getCurrentDate();
 
-    // get next id
-    const id = customers[customers.length - 1].id + 1;
+      const updatedCustomer = {};
 
-    // create customer
-    newCustomer.id = id;
-    newCustomer.name = name;
-    newCustomer.address = address;
-    newCustomer.phone = phone;
-    newCustomer.name = name;
-    newCustomer.createdAt = createDate;
-    newCustomer.updatedAt = "";
+      updatedCustomer.name = name;
+      updatedCustomer.address = address;
+      updatedCustomer.phone = phone;
+      updatedCustomer.id = customer.id;
+      updatedCustomer.createdAt = customer.createdAt;
+      updatedCustomer.updatedAt = currentDate;
 
-    this.props.createNewCustomer(newCustomer);
+      this.props.changeCustomer(updatedCustomer);
+    }
   };
 
   getCurrentDate = () => {
@@ -106,9 +114,16 @@ class CustomersCreate extends React.Component {
 
     return createDate;
   };
+
+  changeInput = e => {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({ [name]: value });
+  };
 }
 
 export default connect(
   null,
-  { createNewCustomer }
-)(CustomersCreate);
+  { changeCustomer }
+)(CustomersChange);

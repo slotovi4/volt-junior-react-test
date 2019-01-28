@@ -1,7 +1,8 @@
 import {
   GET_ALL_CUSTOMERS,
   CREATE_NEW_CUSTOMER,
-  DETELE_CUSTOMER
+  DETELE_CUSTOMER,
+  CHANGE_CUSTOMER
 } from "./types";
 import axios from "axios";
 
@@ -29,5 +30,14 @@ export const deteleCustomer = customerId => async dispatch => {
   dispatch({
     type: DETELE_CUSTOMER,
     payload: customerId
+  });
+};
+
+export const changeCustomer = customer => async dispatch => {
+  await axios.put(`/api/customers/${customer.id}`, customer);
+
+  dispatch({
+    type: CHANGE_CUSTOMER,
+    payload: customer
   });
 };

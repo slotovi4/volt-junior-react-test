@@ -8,12 +8,15 @@ import { cn } from "@bem-react/classname";
 
 // components
 import CustomersCreate from "../CustomersCreate/CustomersCreate";
+import CustomersChange from "../CustomersChange/CustomersChange";
 
 class Customers extends React.Component {
   state = {
-    createCustomer: false,
-    deleteCustomer: false,
-    deleteCustomerId: null
+    createCust: false,
+    deleteCust: false,
+    deleteCustomerId: null,
+    changeCust: false,
+    changedCust: null
   };
 
   // get customers
@@ -23,7 +26,13 @@ class Customers extends React.Component {
 
   render() {
     const cust = cn("Customer");
-    const { createCustomer, deleteCustomer, deleteCustomerId } = this.state;
+    const {
+      createCust,
+      deleteCust,
+      deleteCustomerId,
+      changeCust,
+      changedCust
+    } = this.state;
     const { customers } = this.props;
 
     return (
@@ -31,7 +40,7 @@ class Customers extends React.Component {
         <h1>Customers list</h1>
         <span
           className="btn-default"
-          onClick={() => this.setState({ createCustomer: true })}
+          onClick={() => this.setState({ createCust: true })}
         >
           Create
         </span>
@@ -52,14 +61,24 @@ class Customers extends React.Component {
                     <td>{customer.address}</td>
                     <td>{customer.phone}</td>
                     <td>
-                      <span className="btn-default">Change</span>
+                      <span
+                        className="btn-default"
+                        onClick={() => {
+                          this.setState({
+                            changeCust: true,
+                            changedCust: customer
+                          });
+                        }}
+                      >
+                        Change
+                      </span>
                     </td>
                     <td>
                       <span
                         className="btn-default"
                         onClick={() =>
                           this.setState({
-                            deleteCustomer: true,
+                            deleteCust: true,
                             deleteCustomerId: customer.id
                           })
                         }
@@ -73,21 +92,21 @@ class Customers extends React.Component {
           </tbody>
         </table>
 
-        {createCustomer ? (
+        {createCust ? (
           <CustomersCreate
-            close={() => this.setState({ createCustomer: false })}
+            close={() => this.setState({ createCust: false })}
             customers={customers}
           />
         ) : null}
 
-        {deleteCustomer && deleteCustomerId ? (
+        {deleteCust && deleteCustomerId ? (
           <div>
             <span>Delete?</span>
             <span
               onClick={async () => {
                 await this.props.deteleCustomer(deleteCustomerId);
                 this.setState({
-                  deleteCustomer: false,
+                  deleteCust: false,
                   deleteCustomerId: null
                 });
               }}
@@ -96,12 +115,21 @@ class Customers extends React.Component {
             </span>
             <span
               onClick={() =>
-                this.setState({ deleteCustomer: false, deleteCustomerId: null })
+                this.setState({ deleteCust: false, deleteCustomerId: null })
               }
             >
               no
             </span>
           </div>
+        ) : null}
+
+        {changeCust && changedCust ? (
+          <CustomersChange
+            close={() =>
+              this.setState({ changeCust: false, changedCust: null })
+            }
+            customer={changedCust}
+          />
         ) : null}
       </div>
     );
