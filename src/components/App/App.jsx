@@ -1,11 +1,14 @@
 import * as React from "react";
 
+// components
+import Header from "../Header/Header";
+
 class App extends React.Component {
   render() {
     return (
-      <div>
-        <span>123</span>
-      </div>
+      <React.Fragment>
+        <Header />
+      </React.Fragment>
     );
   }
 }
