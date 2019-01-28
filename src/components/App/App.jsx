@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Provider } from "react-redux";
+import store from "../../store";
 
 // components
 import Header from "../Header/Header";
@@ -6,9 +8,13 @@ import Header from "../Header/Header";
 class App extends React.Component {
   render() {
     return (
-      <React.Fragment>
-        <Header />
-      </React.Fragment>
+      <Provider store={store}>
+        <div>
+          <React.Fragment>
+            <Header />
+          </React.Fragment>
+        </div>
+      </Provider>
     );
   }
 }

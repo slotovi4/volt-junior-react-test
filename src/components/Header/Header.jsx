@@ -11,7 +11,7 @@ class Header extends React.Component {
     return (
       <div className={header()}>
         <span className={header("Logo")}>Invoice App</span>
-        <menu>
+        <menu className={header("Menu")}>
           <li className={header("Link")}>Invoices</li>
           <li className={header("Link")}>Products</li>
           <li className={header("Link")}>Customers</li>
