@@ -4,12 +4,15 @@ import { getAllProducts, deteleProduct } from "../../actions/productsActions";
 
 // components
 import ProductsCreate from "../ProductsCreate/ProductsCreate";
+import ProductsChange from "../ProductsChange/ProductsChange";
 
 class Products extends React.Component {
   state = {
     createProduct: false,
     deleteProd: false,
-    deleteProductId: null
+    deleteProductId: null,
+    changeProd: false,
+    changedProd: null
   };
 
   // get products
@@ -18,7 +21,13 @@ class Products extends React.Component {
   }
 
   render() {
-    const { createProduct, deleteProd, deleteProductId } = this.state;
+    const {
+      createProduct,
+      deleteProd,
+      deleteProductId,
+      changeProd,
+      changedProd
+    } = this.state;
     const { products } = this.props;
 
     return (
@@ -49,7 +58,10 @@ class Products extends React.Component {
                       <span
                         className="btn-default"
                         onClick={() => {
-                          console.log(1);
+                          this.setState({
+                            changeProd: true,
+                            changedProd: product
+                          });
                         }}
                       >
                         Change
@@ -102,6 +114,15 @@ class Products extends React.Component {
               no
             </span>
           </div>
+        ) : null}
+
+        {changeProd && changedProd ? (
+          <ProductsChange
+            close={() =>
+              this.setState({ changeProd: false, changedProd: null })
+            }
+            product={changedProd}
+          />
         ) : null}
       </div>
     );

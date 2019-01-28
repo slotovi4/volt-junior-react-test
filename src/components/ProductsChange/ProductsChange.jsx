@@ -1,25 +1,36 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { createNewProduct } from "../../actions/productsActions";
+import { changeProduct } from "../../actions/productsActions";
 
-class ProductsCreate extends React.Component {
+class ProductsChange extends React.Component {
   state = {
     name: "",
     price: ""
   };
 
+  async componentDidMount() {
+    const { product } = this.props;
+
+    this.setState({
+      name: product.name,
+      price: product.price
+    });
+  }
+
   render() {
     const { close } = this.props;
+    const { name, price } = this.state;
 
     return (
       <div>
-        <form onSubmit={this.createProduct}>
+        <form onSubmit={this.change}>
           <input
             type="text"
             name="name"
             placeholder="Product name..."
             onChange={this.changeInput}
             required
+            defaultValue={name}
           />
           <input
             type="number"
@@ -27,41 +38,33 @@ class ProductsCreate extends React.Component {
             placeholder="Product price..."
             onChange={this.changeInput}
             required
+            defaultValue={price}
           />
-          <input type="submit" value="Create" />
+          <input type="submit" value="Change" />
         </form>
         <span onClick={() => close()}>Close</span>
       </div>
     );
   }
 
-  changeInput = e => {
-    const value = e.target.value;
-    const name = e.target.name;
-
-    this.setState({ [name]: value });
-  };
-
-  createProduct = e => {
+  change = e => {
     e.preventDefault();
+    const { product } = this.props;
     const { name, price } = this.state;
-    const { products } = this.props;
-    const newProduct = {};
 
-    // get current date
-    const createDate = this.getCurrentDate();
+    if (name !== product.name || price !== product.price) {
+      const currentDate = this.getCurrentDate();
 
-    // get next id
-    const id = products[products.length - 1].id + 1;
+      const updatedProduct = {};
 
-    // create customer
-    newProduct.id = id;
-    newProduct.name = name;
-    newProduct.price = price;
-    newProduct.createdAt = createDate;
-    newProduct.updatedAt = "";
+      updatedProduct.name = name;
+      updatedProduct.price = price;
+      updatedProduct.id = product.id;
+      updatedProduct.createdAt = product.createdAt;
+      updatedProduct.updatedAt = currentDate;
 
-    this.props.createNewProduct(newProduct);
+      this.props.changeProduct(updatedProduct);
+    }
   };
 
   getCurrentDate = () => {
@@ -96,11 +99,16 @@ class ProductsCreate extends React.Component {
 
     return date;
   };
+
+  changeInput = e => {
+    const value = e.target.value;
+    const name = e.target.name;
+
+    this.setState({ [name]: value });
+  };
 }
 
 export default connect(
   null,
-  {
-    createNewProduct
-  }
-)(ProductsCreate);
+  { changeProduct }
+)(ProductsChange);

@@ -1,4 +1,9 @@
-import { GET_ALL_PRODUCTS, CREATE_NEW_PRODUCT, DELETE_PRODUCT } from "./types";
+import {
+  GET_ALL_PRODUCTS,
+  CREATE_NEW_PRODUCT,
+  DELETE_PRODUCT,
+  CHANGE_PRODUCT
+} from "./types";
 import axios from "axios";
 
 export const getAllProducts = () => async dispatch => {
@@ -25,5 +30,14 @@ export const deteleProduct = productId => async dispatch => {
   dispatch({
     type: DELETE_PRODUCT,
     payload: productId
+  });
+};
+
+export const changeProduct = product => async dispatch => {
+  await axios.put(`/api/products/${product.id}`, product);
+
+  dispatch({
+    type: CHANGE_PRODUCT,
+    payload: product
   });
 };
