@@ -3,7 +3,14 @@ import { connect } from "react-redux";
 import { getAllCustomers } from "../../actions/customersActions";
 import { cn } from "@bem-react/classname";
 
+// components
+import CustomersCreate from "../CustomersCreate/CustomersCreate";
+
 class Customers extends React.Component {
+  state = {
+    createCustomer: false
+  };
+
   // get customers
   componentWillMount() {
     this.props.getAllCustomers();
@@ -11,12 +18,18 @@ class Customers extends React.Component {
 
   render() {
     const cust = cn("Customer");
+    const { createCustomer } = this.state;
     const { customers } = this.props;
 
     return (
       <div className={cust()}>
         <h1>Customers list</h1>
-        <span>Create</span>
+        <span
+          className="btn-default"
+          onClick={() => this.setState({ createCustomer: true })}
+        >
+          Create
+        </span>
         <table>
           <thead>
             <tr>
@@ -33,11 +46,22 @@ class Customers extends React.Component {
                     <td>{customer.name}</td>
                     <td>{customer.address}</td>
                     <td>{customer.phone}</td>
+                    <td>
+                      <span className="btn-default">Change</span>
+                    </td>
+                    <td>
+                      <span className="btn-default">Delete</span>
+                    </td>
                   </tr>
                 ))
               : null}
           </tbody>
         </table>
+        {createCustomer ? (
+          <CustomersCreate
+            close={() => this.setState({ createCustomer: false })}
+          />
+        ) : null}
       </div>
     );
   }
