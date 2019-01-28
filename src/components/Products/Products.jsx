@@ -1,13 +1,15 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { getAllProducts } from "../../actions/productsActions";
+import { getAllProducts, deteleProduct } from "../../actions/productsActions";
 
 // components
 import ProductsCreate from "../ProductsCreate/ProductsCreate";
 
 class Products extends React.Component {
   state = {
-    createProduct: false
+    createProduct: false,
+    deleteProd: false,
+    deleteProductId: null
   };
 
   // get products
@@ -16,7 +18,7 @@ class Products extends React.Component {
   }
 
   render() {
-    const { createProduct } = this.state;
+    const { createProduct, deleteProd, deleteProductId } = this.state;
     const { products } = this.props;
 
     return (
@@ -56,7 +58,12 @@ class Products extends React.Component {
                     <td>
                       <span
                         className="btn-default"
-                        onClick={() => console.log(2)}
+                        onClick={() =>
+                          this.setState({
+                            deleteProd: true,
+                            deleteProductId: product.id
+                          })
+                        }
                       >
                         Delete
                       </span>
@@ -72,6 +79,30 @@ class Products extends React.Component {
             products={products}
           />
         ) : null}
+
+        {deleteProd && deleteProductId ? (
+          <div>
+            <span>Delete?</span>
+            <span
+              onClick={async () => {
+                await this.props.deteleProduct(deleteProductId);
+                this.setState({
+                  deleteProd: false,
+                  deleteProductId: null
+                });
+              }}
+            >
+              yes
+            </span>
+            <span
+              onClick={() =>
+                this.setState({ deleteProd: false, deleteProductId: null })
+              }
+            >
+              no
+            </span>
+          </div>
+        ) : null}
       </div>
     );
   }
@@ -83,5 +114,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getAllProducts }
+  { getAllProducts, deteleProduct }
 )(Products);

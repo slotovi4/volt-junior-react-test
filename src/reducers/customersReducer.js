@@ -1,7 +1,7 @@
 import {
   GET_ALL_CUSTOMERS,
   CREATE_NEW_CUSTOMER,
-  DETELE_CUSTOMER,
+  DELETE_CUSTOMER,
   CHANGE_CUSTOMER
 } from "../actions/types";
 
@@ -19,7 +19,7 @@ export default (state = initialState, action) => {
         ...state,
         customers: [...state.customers, action.payload]
       };
-    case DETELE_CUSTOMER:
+    case DELETE_CUSTOMER:
       return {
         ...state,
         customers: state.customers.filter(

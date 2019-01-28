@@ -1,7 +1,7 @@
 import {
   GET_ALL_CUSTOMERS,
   CREATE_NEW_CUSTOMER,
-  DETELE_CUSTOMER,
+  DELETE_CUSTOMER,
   CHANGE_CUSTOMER
 } from "./types";
 import axios from "axios";
@@ -28,7 +28,7 @@ export const deteleCustomer = customerId => async dispatch => {
   await axios.delete(`/api/customers/${customerId}`);
 
   dispatch({
-    type: DETELE_CUSTOMER,
+    type: DELETE_CUSTOMER,
     payload: customerId
   });
 };

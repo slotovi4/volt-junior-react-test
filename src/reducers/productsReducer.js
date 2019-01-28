@@ -1,4 +1,8 @@
-import { GET_ALL_PRODUCTS, CREATE_NEW_PRODUCT } from "../actions/types";
+import {
+  GET_ALL_PRODUCTS,
+  CREATE_NEW_PRODUCT,
+  DELETE_PRODUCT
+} from "../actions/types";
 
 const initialState = {};
 
@@ -13,6 +17,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         products: [...state.products, action.payload]
+      };
+    case DELETE_PRODUCT:
+      return {
+        ...state,
+        products: state.products.filter(
+          product => product.id !== action.payload
+        )
       };
     default:
       return state;
