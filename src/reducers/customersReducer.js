@@ -1,4 +1,8 @@
-import { GET_ALL_CUSTOMERS, CREATE_NEW_CUSTOMER } from "../actions/types";
+import {
+  GET_ALL_CUSTOMERS,
+  CREATE_NEW_CUSTOMER,
+  DETELE_CUSTOMER
+} from "../actions/types";
 
 const initialState = {};
 
@@ -13,6 +17,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         customers: [...state.customers, action.payload]
+      };
+    case DETELE_CUSTOMER:
+      return {
+        ...state,
+        customers: state.customers.filter(
+          customer => customer.id !== action.payload
+        )
       };
     default:
       return state;

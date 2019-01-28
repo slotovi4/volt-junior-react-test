@@ -1,6 +1,9 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { getAllCustomers } from "../../actions/customersActions";
+import {
+  getAllCustomers,
+  deteleCustomer
+} from "../../actions/customersActions";
 import { cn } from "@bem-react/classname";
 
 // components
@@ -50,7 +53,12 @@ class Customers extends React.Component {
                       <span className="btn-default">Change</span>
                     </td>
                     <td>
-                      <span className="btn-default">Delete</span>
+                      <span
+                        className="btn-default"
+                        onClick={() => this.props.deteleCustomer(customer.id)}
+                      >
+                        Delete
+                      </span>
                     </td>
                   </tr>
                 ))
@@ -75,6 +83,7 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {
-    getAllCustomers
+    getAllCustomers,
+    deteleCustomer
   }
 )(Customers);
