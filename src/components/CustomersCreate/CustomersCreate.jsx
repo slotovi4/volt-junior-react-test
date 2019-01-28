@@ -1,4 +1,6 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { createNewCustomer } from "../../actions/customersActions";
 
 class CustomersCreate extends React.Component {
   state = {
@@ -51,19 +53,25 @@ class CustomersCreate extends React.Component {
   createCustomer = e => {
     e.preventDefault();
     const { name, address, phone } = this.state;
+    const { customers } = this.props;
     const newCustomer = {};
 
     // get current date
     const createDate = this.getCurrentDate();
 
+    // get next id
+    const id = customers[customers.length - 1].id + 1;
+
     // create customer
+    newCustomer.id = id;
     newCustomer.name = name;
     newCustomer.address = address;
     newCustomer.phone = phone;
     newCustomer.name = name;
     newCustomer.createdAt = createDate;
+    newCustomer.updatedAt = "";
 
-    console.log(newCustomer);
+    this.props.createNewCustomer(newCustomer);
   };
 
   getCurrentDate = () => {
@@ -100,4 +108,7 @@ class CustomersCreate extends React.Component {
   };
 }
 
-export default CustomersCreate;
+export default connect(
+  null,
+  { createNewCustomer }
+)(CustomersCreate);

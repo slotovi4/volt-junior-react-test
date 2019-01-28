@@ -60,6 +60,7 @@ class Customers extends React.Component {
         {createCustomer ? (
           <CustomersCreate
             close={() => this.setState({ createCustomer: false })}
+            customers={customers}
           />
         ) : null}
       </div>
