@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "@bem-react/classname";
+import { Link } from "react-router-dom";
 
 // styles
 import "./Header.css";
@@ -10,12 +11,20 @@ class Header extends React.Component {
 
     return (
       <div className={header()}>
-        <span className={header("Logo")}>Invoice App</span>
-        <menu className={header("Menu")}>
-          <li className={header("Link")}>Invoices</li>
-          <li className={header("Link")}>Products</li>
-          <li className={header("Link")}>Customers</li>
-        </menu>
+        <div className={header("Container")}>
+          <span className={header("Logo")}>Invoice App</span>
+          <menu className={header("Menu")}>
+            <Link to={"/invoices"} className={header("Link")}>
+              Invoices
+            </Link>
+            <Link to={"/products"} className={header("Link")}>
+              Products
+            </Link>
+            <Link to={"/customers"} className={header("Link")}>
+              Customers
+            </Link>
+          </menu>
+        </div>
       </div>
     );
   }

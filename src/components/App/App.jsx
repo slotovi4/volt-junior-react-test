@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Provider } from "react-redux";
 import store from "../../store";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 // components
 import Header from "../Header/Header";
@@ -10,12 +11,14 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <div>
-          <React.Fragment>
+        <Router>
+          <div>
             <Header />
-            <Customers />
-          </React.Fragment>
-        </div>
+            <Switch>
+              <Route exact path="/" component={Customers} />
+            </Switch>
+          </div>
+        </Router>
       </Provider>
     );
   }

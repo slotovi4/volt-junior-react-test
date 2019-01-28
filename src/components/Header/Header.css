@@ -6,6 +6,13 @@
   line-height: 50px;
 }
 
+.Header-Container {
+  max-width: 950px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
 .Header-Menu {
   list-style: none;
   display: flex;
@@ -22,6 +29,8 @@
 
 .Header-Link {
   color: gray;
-  font-weight: 100;
   cursor: pointer;
+  display: inline-block;
+  margin-left: 10px;
+  padding: 0 10px;
 }
