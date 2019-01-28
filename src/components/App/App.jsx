@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 // components
 import Header from "../Header/Header";
 import Customers from "../Customers/Customers";
+import Products from "../Products/Products";
 
 class App extends React.Component {
   render() {
@@ -16,6 +17,7 @@ class App extends React.Component {
             <Header />
             <Switch>
               <Route exact path="/" component={Customers} />
+              <Route exact path="/products" component={Products} />
             </Switch>
           </div>
         </Router>
