@@ -11,7 +11,9 @@ import CustomersCreate from "../CustomersCreate/CustomersCreate";
 
 class Customers extends React.Component {
   state = {
-    createCustomer: false
+    createCustomer: false,
+    deleteCustomer: false,
+    deleteCustomerId: null
   };
 
   // get customers
@@ -21,7 +23,7 @@ class Customers extends React.Component {
 
   render() {
     const cust = cn("Customer");
-    const { createCustomer } = this.state;
+    const { createCustomer, deleteCustomer, deleteCustomerId } = this.state;
     const { customers } = this.props;
 
     return (
@@ -55,7 +57,12 @@ class Customers extends React.Component {
                     <td>
                       <span
                         className="btn-default"
-                        onClick={() => this.props.deteleCustomer(customer.id)}
+                        onClick={() =>
+                          this.setState({
+                            deleteCustomer: true,
+                            deleteCustomerId: customer.id
+                          })
+                        }
                       >
                         Delete
                       </span>
@@ -65,11 +72,36 @@ class Customers extends React.Component {
               : null}
           </tbody>
         </table>
+
         {createCustomer ? (
           <CustomersCreate
             close={() => this.setState({ createCustomer: false })}
             customers={customers}
           />
+        ) : null}
+
+        {deleteCustomer && deleteCustomerId ? (
+          <div>
+            <span>Delete?</span>
+            <span
+              onClick={async () => {
+                await this.props.deteleCustomer(deleteCustomerId);
+                this.setState({
+                  deleteCustomer: false,
+                  deleteCustomerId: null
+                });
+              }}
+            >
+              yes
+            </span>
+            <span
+              onClick={() =>
+                this.setState({ deleteCustomer: false, deleteCustomerId: null })
+              }
+            >
+              no
+            </span>
+          </div>
         ) : null}
       </div>
     );
