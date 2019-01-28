@@ -1,12 +1,11 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { createNewCustomer } from "../../actions/customersActions";
+import { createNewProduct } from "../../actions/productsActions";
 
-class CustomersCreate extends React.Component {
+class ProductsCreate extends React.Component {
   state = {
     name: "",
-    address: "",
-    phone: ""
+    price: ""
   };
 
   render() {
@@ -14,25 +13,18 @@ class CustomersCreate extends React.Component {
 
     return (
       <div>
-        <form onSubmit={this.createCustomer}>
+        <form onSubmit={this.createProduct}>
           <input
             type="text"
             name="name"
-            placeholder="Customer name..."
+            placeholder="Product name..."
             onChange={this.changeInput}
             required
           />
           <input
             type="text"
-            name="address"
-            placeholder="Customer address..."
-            onChange={this.changeInput}
-            required
-          />
-          <input
-            type="text"
-            name="phone"
-            placeholder="Customer phone..."
+            name="price"
+            placeholder="Product price..."
             onChange={this.changeInput}
             required
           />
@@ -50,27 +42,26 @@ class CustomersCreate extends React.Component {
     this.setState({ [name]: value });
   };
 
-  createCustomer = e => {
+  createProduct = e => {
     e.preventDefault();
-    const { name, address, phone } = this.state;
-    const { customers } = this.props;
-    const newCustomer = {};
+    const { name, price } = this.state;
+    const { products } = this.props;
+    const newProduct = {};
 
     // get current date
     const createDate = this.getCurrentDate();
 
     // get next id
-    const id = customers[customers.length - 1].id + 1;
+    const id = products[products.length - 1].id + 1;
 
     // create customer
-    newCustomer.id = id;
-    newCustomer.name = name;
-    newCustomer.address = address;
-    newCustomer.phone = phone;
-    newCustomer.createdAt = createDate;
-    newCustomer.updatedAt = "";
+    newProduct.id = id;
+    newProduct.name = name;
+    newProduct.price = price;
+    newProduct.createdAt = createDate;
+    newProduct.updatedAt = "";
 
-    this.props.createNewCustomer(newCustomer);
+    this.props.createNewProduct(newProduct);
   };
 
   getCurrentDate = () => {
@@ -109,5 +100,7 @@ class CustomersCreate extends React.Component {
 
 export default connect(
   null,
-  { createNewCustomer }
-)(CustomersCreate);
+  {
+    createNewProduct
+  }
+)(ProductsCreate);

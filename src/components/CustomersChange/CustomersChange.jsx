@@ -97,7 +97,7 @@ class CustomersChange extends React.Component {
     if (hour < 10) hour = "0" + hour;
     if (sec < 10) sec = "0" + sec;
 
-    const createDate =
+    const date =
       year +
       "-" +
       month +
@@ -112,7 +112,7 @@ class CustomersChange extends React.Component {
       "." +
       ms;
 
-    return createDate;
+    return date;
   };
 
   changeInput = e => {

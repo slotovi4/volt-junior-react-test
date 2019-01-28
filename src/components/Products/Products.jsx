@@ -2,18 +2,32 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { getAllProducts } from "../../actions/productsActions";
 
+// components
+import ProductsCreate from "../ProductsCreate/ProductsCreate";
+
 class Products extends React.Component {
+  state = {
+    createProduct: false
+  };
+
   // get products
   componentWillMount() {
     this.props.getAllProducts();
   }
 
   render() {
+    const { createProduct } = this.state;
     const { products } = this.props;
 
     return (
       <div>
         <h1>Product list</h1>
+        <span
+          className="btn-default"
+          onClick={() => this.setState({ createProduct: true })}
+        >
+          Create
+        </span>
         <table>
           <thead>
             <tr>
@@ -52,6 +66,12 @@ class Products extends React.Component {
               : null}
           </tbody>
         </table>
+        {createProduct ? (
+          <ProductsCreate
+            close={() => this.setState({ createProduct: false })}
+            products={products}
+          />
+        ) : null}
       </div>
     );
   }
