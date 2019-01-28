@@ -4,6 +4,7 @@ import store from "../../store";
 
 // components
 import Header from "../Header/Header";
+import Customers from "../Customers/Customers";
 
 class App extends React.Component {
   render() {
@@ -12,6 +13,7 @@ class App extends React.Component {
         <div>
           <React.Fragment>
             <Header />
+            <Customers />
           </React.Fragment>
         </div>
       </Provider>
