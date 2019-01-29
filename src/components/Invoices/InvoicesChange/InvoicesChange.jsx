@@ -78,6 +78,7 @@ class InvoicesChange extends React.Component {
                 placeholder="Invoice customer..."
                 onChange={this.changeInput}
                 value={customerId}
+                onChange={this.changeCustomer}
                 required
               >
                 {customers.map(customer => {
@@ -184,6 +185,11 @@ class InvoicesChange extends React.Component {
     this.setState({ [name]: value });
   };
 
+  changeCustomer = e => {
+    const customerId = e.target.value;
+    this.props.changeInvoice(customerId);
+  };
+
   convertCustProduct = () => {
     const addedProducts = [];
     const { custProducts } = this.state;
@@ -231,6 +237,17 @@ class InvoicesChange extends React.Component {
     }
 
     this.setState({ total });
+  };
+
+  deleteProduct = index => {
+    const { addedProducts } = this.state;
+
+    // delete product
+    addedProducts.splice(index, 1);
+
+    // set state
+    this.setState({ addedProducts });
+    this.calcTotal();
   };
 
   addProduct = () => {
