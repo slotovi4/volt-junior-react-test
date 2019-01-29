@@ -24,7 +24,7 @@ class InvoicesCreate extends React.Component {
 
   render() {
     const { addedProducts, total } = this.state;
-    const { close, customers, products } = this.props;
+    const { close, customers, products, invoices } = this.props;
 
     return (
       <div>
@@ -51,11 +51,29 @@ class InvoicesCreate extends React.Component {
                 <option value="hide" disabled hidden>
                   Choose here
                 </option>
-                {customers.map(customer => (
-                  <option key={customer.id + "_customer"} value={customer.id}>
-                    {customer.name}
-                  </option>
-                ))}
+                {customers.map(customer => {
+                  // check added invoice
+                  const invLength = invoices.length;
+                  let hasInvoice = false;
+                  for (let i = 0; i < invLength; i++) {
+                    if (invoices[i].customer_id === customer.id) {
+                      hasInvoice = true;
+                    }
+                  }
+
+                  if (hasInvoice) {
+                    return null;
+                  } else {
+                    return (
+                      <option
+                        key={customer.id + "_customer"}
+                        value={customer.id}
+                      >
+                        {customer.name}
+                      </option>
+                    );
+                  }
+                })}
               </select>
             </div>
           ) : null}
