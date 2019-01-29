@@ -2,7 +2,8 @@ import {
   GET_ALL_INVOICES,
   CREATE_NEW_INVOICE,
   DELETE_INVOICE,
-  CHANGE_INVOICE
+  CHANGE_INVOICE,
+  SET_INVOICE_ITEM
 } from "../actions/types";
 
 const initialState = {};
@@ -32,6 +33,10 @@ export default (state = initialState, action) => {
         invoices: state.invoices.map(invoice =>
           invoice.id === action.payload.id ? action.payload : invoice
         )
+      };
+    case SET_INVOICE_ITEM:
+      return {
+        ...state
       };
     default:
       return state;

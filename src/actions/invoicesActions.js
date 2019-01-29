@@ -2,7 +2,8 @@ import {
   GET_ALL_INVOICES,
   CREATE_NEW_INVOICE,
   DELETE_INVOICE,
-  CHANGE_INVOICE
+  CHANGE_INVOICE,
+  SET_INVOICE_ITEM
 } from "./types";
 import axios from "axios";
 
@@ -39,5 +40,13 @@ export const changeInvoice = invoice => async dispatch => {
   dispatch({
     type: CHANGE_INVOICE,
     payload: invoice
+  });
+};
+
+export const setInvoiceItem = (invoiceId, item) => async dispatch => {
+  await axios.post(`/api/invoices/${invoiceId}/items`, item);
+
+  dispatch({
+    type: SET_INVOICE_ITEM
   });
 };

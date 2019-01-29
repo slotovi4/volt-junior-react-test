@@ -2,7 +2,10 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { getAllCustomers } from "../../../actions/customersActions";
 import { getAllProducts } from "../../../actions/productsActions";
-import { createNewInvoice } from "../../../actions/invoicesActions";
+import {
+  createNewInvoice,
+  setInvoiceItem
+} from "../../../actions/invoicesActions";
 
 class InvoicesCreate extends React.Component {
   state = {
@@ -138,7 +141,7 @@ class InvoicesCreate extends React.Component {
     }
 
     // add qty
-    addedProduct.qty = e.target.value;
+    addedProduct.qty = parseInt(e.target.value);
 
     // put state
     this.setState({ addedProduct });
@@ -193,7 +196,7 @@ class InvoicesCreate extends React.Component {
   createInvoice = e => {
     e.preventDefault();
     const { invoices } = this.props;
-    const { discount, customerId, total } = this.state;
+    const { addedProducts, discount, customerId, total } = this.state;
 
     if (discount && discount !== "" && customerId && customerId !== "") {
       // create new invoice
@@ -210,6 +213,9 @@ class InvoicesCreate extends React.Component {
 
       // put new invoice
       this.props.createNewInvoice(newInvoice);
+
+      // put invoice items
+      this.props.setInvoiceItem(id, addedProducts);
     }
   };
 }
@@ -225,6 +231,7 @@ export default connect(
   {
     getAllCustomers,
     getAllProducts,
-    createNewInvoice
+    createNewInvoice,
+    setInvoiceItem
   }
 )(InvoicesCreate);
