@@ -16,8 +16,8 @@ class Products extends React.Component {
   };
 
   // get products
-  componentWillMount() {
-    this.props.getAllProducts();
+  async componentWillMount() {
+    await this.props.getAllProducts();
   }
 
   render() {

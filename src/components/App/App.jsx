@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "../Header/Header";
 import Customers from "../Customers/Customers";
 import Products from "../Products/Products";
+import Invoices from "../Invoices/Invoices";
 
 class App extends React.Component {
   render() {
@@ -18,6 +19,7 @@ class App extends React.Component {
             <Switch>
               <Route exact path="/customers" component={Customers} />
               <Route exact path="/products" component={Products} />
+              <Route exact path="/" component={Invoices} />
             </Switch>
           </div>
         </Router>

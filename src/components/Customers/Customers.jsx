@@ -20,8 +20,8 @@ class Customers extends React.Component {
   };
 
   // get customers
-  componentWillMount() {
-    this.props.getAllCustomers();
+  async componentWillMount() {
+    await this.props.getAllCustomers();
   }
 
   render() {
@@ -37,7 +37,7 @@ class Customers extends React.Component {
 
     return (
       <div className={cust()}>
-        <h1>Customers list</h1>
+        <h1>Customer list</h1>
         <span
           className="btn-default"
           onClick={() => this.setState({ createCust: true })}

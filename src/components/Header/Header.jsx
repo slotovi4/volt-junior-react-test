@@ -14,7 +14,7 @@ class Header extends React.Component {
         <div className={header("Container")}>
           <span className={header("Logo")}>Invoice App</span>
           <menu className={header("Menu")}>
-            <Link to={"/invoices"} className={header("Link")}>
+            <Link to={"/"} className={header("Link")}>
               Invoices
             </Link>
             <Link to={"/products"} className={header("Link")}>
