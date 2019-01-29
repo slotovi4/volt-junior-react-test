@@ -1,9 +1,11 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { getAllInvoices, deteleInvoice } from "../../actions/invoicesActions";
+import { getAllCustomers } from "../../actions/customersActions";
 
 //components
 import InvoicesCreate from "./InvoicesCreate/InvoicesCreate";
+import InvoicesChange from "./InvoicesChange/InvoicesChange";
 
 class Invoices extends React.Component {
   state = {
@@ -17,11 +19,12 @@ class Invoices extends React.Component {
   // get invoices
   async componentWillMount() {
     await this.props.getAllInvoices();
+    await this.props.getAllCustomers();
   }
 
   render() {
-    const { createInv } = this.state;
-    const { invoices } = this.props;
+    const { createInv, changeInv } = this.state;
+    const { invoices, customers } = this.props;
 
     return (
       <div>
@@ -42,43 +45,50 @@ class Invoices extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {invoices && invoices.length > 0
-              ? invoices.map((invoice, index) => (
-                  <tr key={invoice.id}>
-                    <td>{index}</td>
-                    <td>{invoice.customer_id}</td>
-                    <td>{invoice.discount}</td>
-                    <td>{invoice.total}</td>
-                    <td>
-                      <span
-                        className="btn-default"
-                        onClick={
-                          () => console.log(1)
-                          // this.setState({
-                          //   changeCust: true,
-                          //   changedCust: customer
-                          // });
-                        }
-                      >
-                        Change
-                      </span>
-                    </td>
-                    <td>
-                      <span
-                        className="btn-default"
-                        onClick={
-                          () => console.log(2)
-                          // this.setState({
-                          //   deleteCust: true,
-                          //   deleteCustomerId: customer.id
-                          // })
-                        }
-                      >
-                        Delete
-                      </span>
-                    </td>
-                  </tr>
-                ))
+            {invoices && customers && invoices.length > 0
+              ? invoices.map((invoice, index) => {
+                  const { customer_id, discount, total, id } = invoice;
+
+                  const customer = customers.filter(
+                    customer => customer.id === customer_id
+                  );
+
+                  return (
+                    <tr key={id}>
+                      <td>{index}</td>
+                      <td>{customer[0].name}</td>
+                      <td>{discount}</td>
+                      <td>{total}</td>
+                      <td>
+                        <span
+                          className="btn-default"
+                          onClick={() =>
+                            this.setState({
+                              changeInv: true,
+                              changedInv: invoice
+                            })
+                          }
+                        >
+                          Change
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          className="btn-default"
+                          onClick={
+                            () => console.log(2)
+                            // this.setState({
+                            //   deleteCust: true,
+                            //   deleteCustomerId: customer.id
+                            // })
+                          }
+                        >
+                          Delete
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })
               : null}
           </tbody>
         </table>
@@ -89,19 +99,23 @@ class Invoices extends React.Component {
             invoices={invoices}
           />
         ) : null}
+
+        {changeInv ? <InvoicesChange /> : null}
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  invoices: state.invoice.invoices
+  invoices: state.invoice.invoices,
+  customers: state.customer.customers
 });
 
 export default connect(
   mapStateToProps,
   {
     getAllInvoices,
-    deteleInvoice
+    deteleInvoice,
+    getAllCustomers
   }
 )(Invoices);

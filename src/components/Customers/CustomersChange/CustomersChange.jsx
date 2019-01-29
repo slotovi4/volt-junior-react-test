@@ -9,7 +9,7 @@ class CustomersChange extends React.Component {
     phone: ""
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { customer } = this.props;
 
     this.setState({

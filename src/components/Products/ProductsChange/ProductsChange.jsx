@@ -8,7 +8,7 @@ class ProductsChange extends React.Component {
     price: ""
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const { product } = this.props;
 
     this.setState({
