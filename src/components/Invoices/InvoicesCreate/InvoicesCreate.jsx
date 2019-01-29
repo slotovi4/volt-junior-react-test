@@ -120,7 +120,7 @@ class InvoicesCreate extends React.Component {
                       <input
                         type="number"
                         placeholder="qty..."
-                        defaultValue={1}
+                        value={addedProduct.qty}
                         min={1}
                         onChange={e => this.changeQty(e, addedProduct)}
                       />
@@ -161,8 +161,6 @@ class InvoicesCreate extends React.Component {
     // add qty
     addedProduct.qty = parseInt(e.target.value);
 
-    // put state
-    this.setState({ addedProduct });
     this.calcTotal();
   };
 
@@ -185,6 +183,18 @@ class InvoicesCreate extends React.Component {
     const length = products.length;
 
     if (productId) {
+      // check dublicate
+      const addLength = addedProducts.length;
+      for (let i = 0; i < addLength; i++) {
+        if (addedProducts[i].id === productId) {
+          addedProducts[i].qty += 1;
+
+          this.setState({ addedProducts });
+          this.calcTotal();
+          return;
+        }
+      }
+
       for (let i = 0; i < length; i++) {
         if (productId === products[i].id) {
           // set product qty

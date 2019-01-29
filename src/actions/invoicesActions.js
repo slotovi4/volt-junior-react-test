@@ -52,8 +52,8 @@ export const setInvoiceItem = (invoiceId, item) => async dispatch => {
   });
 };
 
-export const getInvoiceItems = id => async dispatch => {
-  const invoiceItems = await axios.get(`/api/invoices/${id}/items`);
+export const getInvoiceItems = invoiceId => async dispatch => {
+  const invoiceItems = await axios.get(`/api/invoices/${invoiceId}/items`);
 
   dispatch({
     type: GET_INVOICE_ITEMS,

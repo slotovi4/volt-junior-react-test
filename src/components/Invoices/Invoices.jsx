@@ -53,41 +53,48 @@ class Invoices extends React.Component {
                     customer => customer.id === customer_id
                   );
 
-                  return (
-                    <tr key={id}>
-                      <td>{index}</td>
-                      <td>{customer[0].name}</td>
-                      <td>{discount}</td>
-                      <td>{total}</td>
-                      <td>
-                        <span
-                          className="btn-default"
-                          onClick={() =>
-                            this.setState({
-                              changeInv: true,
-                              changedInv: invoice
-                            })
-                          }
-                        >
-                          Change
-                        </span>
-                      </td>
-                      <td>
-                        <span
-                          className="btn-default"
-                          onClick={
-                            () => console.log(2)
-                            // this.setState({
-                            //   deleteCust: true,
-                            //   deleteCustomerId: customer.id
-                            // })
-                          }
-                        >
-                          Delete
-                        </span>
-                      </td>
-                    </tr>
-                  );
+                  // if has customer
+                  if (customer && customer.length > 0) {
+                    return (
+                      <tr key={id}>
+                        <td>{index}</td>
+                        <td>{customer[0].name}</td>
+                        <td>{discount}</td>
+                        <td>{total}</td>
+                        <td>
+                          <span
+                            className="btn-default"
+                            onClick={() =>
+                              this.setState({
+                                changeInv: true,
+                                changedInv: invoice
+                              })
+                            }
+                          >
+                            Change
+                          </span>
+                        </td>
+                        <td>
+                          <span
+                            className="btn-default"
+                            onClick={
+                              () => console.log(2)
+                              // this.setState({
+                              //   deleteCust: true,
+                              //   deleteCustomerId: customer.id
+                              // })
+                            }
+                          >
+                            Delete
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  }
+                  // if customer deleted
+                  else {
+                    return false;
+                  }
                 })
               : null}
           </tbody>
@@ -100,7 +107,12 @@ class Invoices extends React.Component {
           />
         ) : null}
 
-        {changeInv ? <InvoicesChange invoice={changedInv} /> : null}
+        {changeInv ? (
+          <InvoicesChange
+            invoice={changedInv}
+            close={() => this.setState({ changeInv: false })}
+          />
+        ) : null}
       </div>
     );
   }

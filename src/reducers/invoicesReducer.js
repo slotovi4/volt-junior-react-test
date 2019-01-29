@@ -36,9 +36,7 @@ export default (state = initialState, action) => {
         )
       };
     case SET_INVOICE_ITEM:
-      return {
-        ...state
-      };
+      return state;
     case GET_INVOICE_ITEMS:
       return {
         ...state,
