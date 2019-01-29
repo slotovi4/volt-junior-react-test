@@ -215,7 +215,16 @@ class InvoicesCreate extends React.Component {
       this.props.createNewInvoice(newInvoice);
 
       // put invoice items
-      this.props.setInvoiceItem(id, addedProducts);
+      const prodLength = addedProducts.length;
+      for (let i = 0; i < prodLength; i++) {
+        const item = {};
+
+        item.invoice_id = id;
+        item.product_id = addedProducts[i].id;
+        item.quantity = addedProducts[i].qty;
+
+        this.props.setInvoiceItem(id, item);
+      }
     }
   };
 }

@@ -23,7 +23,7 @@ class Invoices extends React.Component {
   }
 
   render() {
-    const { createInv, changeInv } = this.state;
+    const { createInv, changeInv, changedInv } = this.state;
     const { invoices, customers } = this.props;
 
     return (
@@ -100,7 +100,7 @@ class Invoices extends React.Component {
           />
         ) : null}
 
-        {changeInv ? <InvoicesChange /> : null}
+        {changeInv ? <InvoicesChange invoice={changedInv} /> : null}
       </div>
     );
   }
