@@ -10,7 +10,6 @@ class Products extends React.Component {
   state = {
     deleteProd: false,
     deleteProductId: null,
-    changeProd: false,
     changedProd: null
   };
 
@@ -22,7 +21,7 @@ class Products extends React.Component {
   }
 
   render() {
-    const { deleteProd, deleteProductId, changeProd, changedProd } = this.state;
+    const { deleteProd, deleteProductId, changedProd } = this.state;
     const { products } = this.props;
 
     return (
@@ -40,12 +39,12 @@ class Products extends React.Component {
             </span>
           </h1>
         </div>
-        <table>
+        <table className="table">
           <thead>
             <tr>
-              <td>#</td>
-              <td>Name</td>
-              <td>Price</td>
+              <th>#</th>
+              <th>Name</th>
+              <th>Price</th>
             </tr>
           </thead>
           <tbody>
@@ -57,10 +56,12 @@ class Products extends React.Component {
                     <td>{product.price}</td>
                     <td>
                       <span
-                        className="btn-default"
+                        className="btn btn-default"
+                        data-toggle="modal"
+                        data-target="#changeProductModal"
+                        aria-labelledby="changeProductCenterModal"
                         onClick={() => {
                           this.setState({
-                            changeProd: true,
                             changedProd: product
                           });
                         }}
@@ -70,7 +71,7 @@ class Products extends React.Component {
                     </td>
                     <td>
                       <span
-                        className="btn-default"
+                        className="btn btn-default"
                         onClick={() =>
                           this.setState({
                             deleteProd: true,
@@ -113,14 +114,7 @@ class Products extends React.Component {
           </div>
         ) : null}
 
-        {changeProd && changedProd ? (
-          <ProductsChange
-            close={() =>
-              this.setState({ changeProd: false, changedProd: null })
-            }
-            product={changedProd}
-          />
-        ) : null}
+        <ProductsChange product={changedProd} />
       </div>
     );
   }

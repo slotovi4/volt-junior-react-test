@@ -8,41 +8,60 @@ class ProductsChange extends React.Component {
     price: ""
   };
 
-  componentDidMount() {
-    const { product } = this.props;
-
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      name: product.name,
-      price: product.price
+      name: nextProps.product.name,
+      price: nextProps.product.price
     });
   }
 
   render() {
-    const { close } = this.props;
     const { name, price } = this.state;
 
     return (
-      <div>
-        <form onSubmit={this.change}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Product name..."
-            onChange={this.changeInput}
-            required
-            defaultValue={name}
-          />
-          <input
-            type="number"
-            name="price"
-            placeholder="Product price..."
-            onChange={this.changeInput}
-            required
-            defaultValue={price}
-          />
-          <input type="submit" value="Change" />
-        </form>
-        <span onClick={() => close()}>Close</span>
+      <div className="modal fade" id="changeProductModal" role="dialog">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content" id="changeProductCenterModal">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
+
+              <h4 className="modal-title">Change product</h4>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={this.change}>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Product name..."
+                    onChange={this.changeInput}
+                    required
+                    className="form-control"
+                    value={name}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="number"
+                    name="price"
+                    placeholder="Product price..."
+                    onChange={this.changeInput}
+                    required
+                    className="form-control"
+                    value={price}
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-primary">
+                  Change
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
