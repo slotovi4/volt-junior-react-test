@@ -74,7 +74,7 @@ class InvoicesChange extends React.Component {
             type="text"
             name="discount"
             placeholder="Invoice discount..."
-            defaultValue={discount}
+            value={discount}
             onChange={this.changeInput}
           />
           {invoices && invoices.length > 0 ? (
