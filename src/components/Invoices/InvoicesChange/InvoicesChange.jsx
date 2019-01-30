@@ -272,7 +272,7 @@ class InvoicesChange extends React.Component {
       }
     }
 
-    this.setState({ notFoundProducts: [] });
+    this.setState({ notFoundProducts: [], oldTotal: null });
   };
 
   changeInput = e => {

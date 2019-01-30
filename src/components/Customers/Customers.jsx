@@ -37,19 +37,23 @@ class Customers extends React.Component {
 
     return (
       <div className="container">
-        <h1>Customer list</h1>
-        <span
-          className="btn btn-default"
-          onClick={() => this.setState({ createCust: true })}
-        >
-          Create
-        </span>
-        <table>
+        <div>
+          <h1>
+            Customer list{" "}
+            <span
+              className="btn btn-default"
+              onClick={() => this.setState({ createCust: true })}
+            >
+              Create
+            </span>
+          </h1>
+        </div>
+        <table className="table">
           <thead>
             <tr>
-              <td>#</td>
-              <td>Name</td>
-              <td>Address</td>
+              <th>#</th>
+              <th>Name</th>
+              <th>Address</th>
             </tr>
           </thead>
           <tbody>
@@ -62,7 +66,7 @@ class Customers extends React.Component {
                     <td>{customer.phone}</td>
                     <td>
                       <span
-                        className="btn-default"
+                        className="btn btn-default"
                         onClick={() => {
                           this.setState({
                             changeCust: true,
@@ -75,7 +79,7 @@ class Customers extends React.Component {
                     </td>
                     <td>
                       <span
-                        className="btn-default"
+                        className="btn btn-default"
                         onClick={() =>
                           this.setState({
                             deleteCust: true,
