@@ -5,7 +5,8 @@ import {
   CHANGE_INVOICE,
   SET_INVOICE_ITEM,
   GET_INVOICE_ITEMS,
-  CHANGE_INVOICE_ITEMS
+  CHANGE_INVOICE_ITEMS,
+  DELETE_INVOICE_ITEM
 } from "../actions/types";
 
 const initialState = {
@@ -55,6 +56,13 @@ export default (state = initialState, action) => {
         ...state,
         invoiceItems: state.invoiceItems.map(item =>
           item.id === action.payload.id ? action.payload : item
+        )
+      };
+    case DELETE_INVOICE_ITEM:
+      return {
+        ...state,
+        invoiceItems: state.invoiceItems.filter(
+          item => item.id !== action.payload.id
         )
       };
     default:

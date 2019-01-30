@@ -4,7 +4,8 @@ import {
   getInvoiceItems,
   changeInvoice,
   changeInvoiceItems,
-  setInvoiceItem
+  setInvoiceItem,
+  deleteInvoiceItem
 } from "../../../actions/invoicesActions";
 import { getAllProducts } from "../../../actions/productsActions";
 
@@ -166,9 +167,7 @@ class InvoicesChange extends React.Component {
                         />
                       </td>
                       <td>
-                        <span onClick={index => this.deleteProduct(index)}>
-                          x
-                        </span>
+                        <span onClick={() => this.deleteProduct(index)}>x</span>
                       </td>
                     </tr>
                   );
@@ -296,11 +295,18 @@ class InvoicesChange extends React.Component {
     this.setState({ total });
   };
 
-  deleteProduct = index => {
+  deleteProduct = async index => {
     const { addedProducts } = this.state;
+    const { invoice } = this.props;
+    const id = addedProducts[index].id;
+    const invoiceId = invoice.id;
 
     // delete product
     addedProducts.splice(index, 1);
+
+    if (id && invoiceId) {
+      await this.props.deleteInvoiceItem(invoiceId, id);
+    }
 
     // set state
     this.setState({ addedProducts });
@@ -362,6 +368,7 @@ export default connect(
     getAllProducts,
     changeInvoice,
     changeInvoiceItems,
-    setInvoiceItem
+    setInvoiceItem,
+    deleteInvoiceItem
   }
 )(InvoicesChange);
