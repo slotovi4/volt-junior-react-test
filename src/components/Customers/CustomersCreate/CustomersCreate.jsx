@@ -10,36 +10,62 @@ class CustomersCreate extends React.Component {
   };
 
   render() {
-    const { close } = this.props;
+    const { name, address, phone } = this.state;
 
     return (
-      <div>
-        <form onSubmit={this.createCustomer}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Customer name..."
-            onChange={this.changeInput}
-            required
-          />
-          <input
-            type="text"
-            name="address"
-            placeholder="Customer address..."
-            onChange={this.changeInput}
-            required
-          />
-          <input
-            type="tel"
-            name="phone"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            placeholder="Customer phone xxx-xxx-xxxx"
-            onChange={this.changeInput}
-            required
-          />
-          <input type="submit" value="Create" />
-        </form>
-        <span onClick={() => close()}>Close</span>
+      <div className="modal fade" id="createCustomerModal" role="dialog">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content" id="createChangeCustomerModal">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
+
+              <h4 className="modal-title">Create customer</h4>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={this.createCustomer}>
+                <div className="form-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="name"
+                    placeholder="Customer name..."
+                    onChange={this.changeInput}
+                    value={name}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="address"
+                    placeholder="Customer address..."
+                    onChange={this.changeInput}
+                    value={address}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-control"
+                    type="tel"
+                    name="phone"
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    placeholder="Customer phone xxx-xxx-xxxx"
+                    onChange={this.changeInput}
+                    value={phone}
+                    required
+                  />
+                </div>
+                <button className="btn btn-primary" type="submit">
+                  Create
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -67,6 +93,9 @@ class CustomersCreate extends React.Component {
     newCustomer.phone = phone;
 
     this.props.createNewCustomer(newCustomer);
+
+    // clear state
+    this.setState({ name: "", address: "", phone: "" });
   };
 }
 

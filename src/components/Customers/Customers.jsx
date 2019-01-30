@@ -9,7 +9,6 @@ import CustomersDelete from "./CustomersDelete/CustomersDelete";
 
 class Customers extends React.Component {
   state = {
-    createCust: false,
     deleteCustomerId: null,
     changedCust: null
   };
@@ -22,12 +21,7 @@ class Customers extends React.Component {
   }
 
   render() {
-    const {
-      createCust,
-      deleteCust,
-      deleteCustomerId,
-      changedCust
-    } = this.state;
+    const { deleteCustomerId, changedCust } = this.state;
     const { customers } = this.props;
 
     return (
@@ -37,7 +31,9 @@ class Customers extends React.Component {
             Customer list{" "}
             <span
               className="btn btn-default"
-              onClick={() => this.setState({ createCust: true })}
+              data-toggle="modal"
+              data-target="#createCustomerModal"
+              aria-labelledby="createChangeCustomerModal"
             >
               Create
             </span>
@@ -95,12 +91,7 @@ class Customers extends React.Component {
           </tbody>
         </table>
 
-        {createCust ? (
-          <CustomersCreate
-            close={() => this.setState({ createCust: false })}
-            customers={customers}
-          />
-        ) : null}
+        <CustomersCreate customers={customers} />
 
         <CustomersDelete
           customerId={deleteCustomerId}
