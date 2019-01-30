@@ -38,6 +38,7 @@ class InvoicesChange extends React.Component {
       customerId: this.props.invoice.customer_id,
       custProducts: this.props.invoiceItems,
       total: this.props.invoice.total,
+      oldTotal: null,
       notFoundProducts: []
     });
 
@@ -60,6 +61,7 @@ class InvoicesChange extends React.Component {
         customerId: this.props.invoice.customer_id,
         custProducts: this.props.invoiceItems,
         total: this.props.invoice.total,
+        oldTotal: null,
         notFoundProducts: []
       });
 
@@ -200,7 +202,7 @@ class InvoicesChange extends React.Component {
           ) : null}
 
           <h1>
-            {notFoundProducts && notFoundProducts.length > 0
+            {oldTotal
               ? `Old total: ${oldTotal}, New total: ${total}`
               : `Total: ${total}`}
           </h1>
@@ -324,9 +326,9 @@ class InvoicesChange extends React.Component {
     this.setState({ addedProducts, notFoundProducts });
 
     // set new total
-    if (notFoundProducts && notFoundProducts.length > 0) {
-      this.setState({ oldTotal: this.props.invoice.total });
-    }
+    // if (notFoundProducts && notFoundProducts.length > 0) {
+    //   this.setState({ oldTotal: this.props.invoice.total });
+    // }
 
     this.calcTotal();
   };
@@ -350,6 +352,10 @@ class InvoicesChange extends React.Component {
 
     for (let i = 0; i < length; i++) {
       total += addedProducts[i].price * addedProducts[i].qty;
+    }
+
+    if (this.props.invoice.total !== total) {
+      this.setState({ oldTotal: this.props.invoice.total });
     }
 
     this.setState({ total });
