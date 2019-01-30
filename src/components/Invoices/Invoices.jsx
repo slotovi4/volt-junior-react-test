@@ -77,13 +77,7 @@ class Invoices extends React.Component {
                         <td>
                           <span
                             className="btn-default"
-                            onClick={
-                              () => console.log(2)
-                              // this.setState({
-                              //   deleteCust: true,
-                              //   deleteCustomerId: customer.id
-                              // })
-                            }
+                            onClick={() => this.props.deteleInvoice(id)}
                           >
                             Delete
                           </span>
