@@ -1,14 +1,14 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { getAllProducts, deteleProduct } from "../../actions/productsActions";
+import { getAllProducts } from "../../actions/productsActions";
 
 // components
 import ProductsCreate from "./ProductsCreate/ProductsCreate";
 import ProductsChange from "./ProductsChange/ProductsChange";
+import ProductsDelete from "./ProductsDelete/ProductsDelete";
 
 class Products extends React.Component {
   state = {
-    deleteProd: false,
     deleteProductId: null,
     changedProd: null
   };
@@ -16,12 +16,11 @@ class Products extends React.Component {
   // get products
   async componentWillMount() {
     await this.props.getAllProducts();
-
     document.title = "Products";
   }
 
   render() {
-    const { deleteProd, deleteProductId, changedProd } = this.state;
+    const { deleteProductId, changedProd } = this.state;
     const { products } = this.props;
 
     return (
@@ -72,9 +71,11 @@ class Products extends React.Component {
                     <td>
                       <span
                         className="btn btn-default"
+                        data-toggle="modal"
+                        data-target="#deleteProductModal"
+                        aria-labelledby="deleteProductCenterModal"
                         onClick={() =>
                           this.setState({
-                            deleteProd: true,
                             deleteProductId: product.id
                           })
                         }
@@ -90,29 +91,10 @@ class Products extends React.Component {
 
         <ProductsCreate products={products} />
 
-        {deleteProd && deleteProductId ? (
-          <div>
-            <span>Delete?</span>
-            <span
-              onClick={async () => {
-                await this.props.deteleProduct(deleteProductId);
-                this.setState({
-                  deleteProd: false,
-                  deleteProductId: null
-                });
-              }}
-            >
-              yes
-            </span>
-            <span
-              onClick={() =>
-                this.setState({ deleteProd: false, deleteProductId: null })
-              }
-            >
-              no
-            </span>
-          </div>
-        ) : null}
+        <ProductsDelete
+          productId={deleteProductId}
+          close={() => this.setState({ deleteProductId: null })}
+        />
 
         <ProductsChange product={changedProd} />
       </div>
@@ -126,5 +108,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getAllProducts, deteleProduct }
+  { getAllProducts }
 )(Products);
