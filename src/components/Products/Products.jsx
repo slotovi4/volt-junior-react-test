@@ -25,19 +25,17 @@ class Products extends React.Component {
 
     return (
       <div className="container">
-        <div>
-          <h1>
-            Product list{" "}
-            <span
-              className="btn btn-default"
-              data-toggle="modal"
-              data-target="#createProductModal"
-              aria-labelledby="createProductCenterModal"
-            >
-              Create
-            </span>
-          </h1>
-        </div>
+        <h1>
+          Product list{" "}
+          <span
+            className="btn btn-default"
+            data-toggle="modal"
+            data-target="#createProductModal"
+            aria-labelledby="createProductCenterModal"
+          >
+            Create
+          </span>
+        </h1>
         <table className="table">
           <thead>
             <tr>
@@ -55,7 +53,7 @@ class Products extends React.Component {
                     <td>{product.price}</td>
                     <td>
                       <span
-                        className="btn btn-default"
+                        className="btn btn-default btn-sm"
                         data-toggle="modal"
                         data-target="#changeProductModal"
                         aria-labelledby="changeProductCenterModal"
@@ -70,7 +68,7 @@ class Products extends React.Component {
                     </td>
                     <td>
                       <span
-                        className="btn btn-default"
+                        className="btn btn-default btn-sm"
                         data-toggle="modal"
                         data-target="#deleteProductModal"
                         aria-labelledby="deleteProductCenterModal"

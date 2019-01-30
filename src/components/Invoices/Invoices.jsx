@@ -20,19 +20,23 @@ class Invoices extends React.Component {
     const { invoices, customers } = this.props;
 
     return (
-      <div>
-        <h1>Invoice list</h1>
-        <Link to="/invoices/create">
-          <span className="btn-default">Create</span>
-        </Link>
+      <div className="container">
+        <div>
+          <h1>
+            Invoice list{" "}
+            <Link to="/invoices/create">
+              <span className="btn btn-default">Create</span>
+            </Link>
+          </h1>
+        </div>
 
-        <table>
+        <table className="table">
           <thead>
             <tr>
-              <td>#</td>
-              <td>Customer</td>
-              <td>Discount</td>
-              <td>Total</td>
+              <th>#</th>
+              <th>Customer</th>
+              <th>Discount</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -54,12 +58,14 @@ class Invoices extends React.Component {
                         <td>{total}</td>
                         <td>
                           <Link to={`/invoices/change/${id}`}>
-                            <span className="btn-default">Change</span>
+                            <span className="btn btn-default btn-sm">
+                              Change
+                            </span>
                           </Link>
                         </td>
                         <td>
                           <span
-                            className="btn-default"
+                            className="btn btn-default btn-sm"
                             onClick={() => this.props.deteleInvoice(id)}
                           >
                             Delete

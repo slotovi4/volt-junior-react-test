@@ -26,19 +26,17 @@ class Customers extends React.Component {
 
     return (
       <div className="container">
-        <div>
-          <h1>
-            Customer list{" "}
-            <span
-              className="btn btn-default"
-              data-toggle="modal"
-              data-target="#createCustomerModal"
-              aria-labelledby="createChangeCustomerModal"
-            >
-              Create
-            </span>
-          </h1>
-        </div>
+        <h1>
+          Customer list{" "}
+          <span
+            className="btn btn-default"
+            data-toggle="modal"
+            data-target="#createCustomerModal"
+            aria-labelledby="createChangeCustomerModal"
+          >
+            Create
+          </span>
+        </h1>
         <table className="table">
           <thead>
             <tr>
@@ -57,7 +55,7 @@ class Customers extends React.Component {
                     <td>{customer.phone}</td>
                     <td>
                       <span
-                        className="btn btn-default"
+                        className="btn btn-default btn-sm"
                         data-toggle="modal"
                         data-target="#changeCustomerModal"
                         aria-labelledby="centerChangeCustomerModal"
@@ -72,7 +70,7 @@ class Customers extends React.Component {
                     </td>
                     <td>
                       <span
-                        className="btn btn-default"
+                        className="btn btn-default btn-sm"
                         data-toggle="modal"
                         data-target="#deleteCustomerModal"
                         aria-labelledby="centerDeleteCustomerModal"
