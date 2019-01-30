@@ -347,6 +347,8 @@ class InvoicesChange extends React.Component {
 
     if (this.props.invoice.total !== total) {
       this.setState({ oldTotal: this.props.invoice.total });
+    } else {
+      this.setState({ oldTotal: null });
     }
 
     this.setState({ total });
