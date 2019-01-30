@@ -16,6 +16,8 @@ class InvoicesChange extends React.Component {
     productId: "",
     custProducts: [],
     addedProducts: [],
+    notFoundProducts: [],
+    oldTotal: null,
     total: 0
   };
 
@@ -35,11 +37,19 @@ class InvoicesChange extends React.Component {
       discount: parseFloat(this.props.invoice.discount),
       customerId: this.props.invoice.customer_id,
       custProducts: this.props.invoiceItems,
-      total: this.props.invoice.total
+      total: this.props.invoice.total,
+      notFoundProducts: []
     });
 
     // convert products
     this.convertCustProduct();
+
+    // set new total
+    const { notFoundProducts, total } = this.state;
+    if (notFoundProducts && notFoundProducts.length > 0) {
+      this.setState({ oldTotal: total });
+      this.calcTotal();
+    }
   }
 
   async componentWillUpdate(nextProps, nextState) {
@@ -54,17 +64,32 @@ class InvoicesChange extends React.Component {
         discount: parseFloat(this.props.invoice.discount),
         customerId: this.props.invoice.customer_id,
         custProducts: this.props.invoiceItems,
-        total: this.props.invoice.total
+        total: this.props.invoice.total,
+        notFoundProducts: []
       });
 
       // convert products
       this.convertCustProduct();
+
+      // set new total
+      const { notFoundProducts, total } = this.state;
+      if (notFoundProducts && notFoundProducts.length > 0) {
+        this.setState({ oldTotal: total });
+        this.calcTotal();
+      }
     }
   }
 
   render() {
     const { invoices, customers, products, close } = this.props;
-    const { discount, customerId, total, addedProducts } = this.state;
+    const {
+      discount,
+      customerId,
+      total,
+      addedProducts,
+      notFoundProducts,
+      oldTotal
+    } = this.state;
 
     return (
       <div>
@@ -141,6 +166,14 @@ class InvoicesChange extends React.Component {
             </div>
           ) : null}
 
+          {notFoundProducts && notFoundProducts.length > 0
+            ? notFoundProducts.map(notFoundProductId => (
+                <span key={notFoundProductId}>
+                  Products deleted(id): {notFoundProductId}
+                </span>
+              ))
+            : null}
+
           {addedProducts && addedProducts.length > 0 ? (
             <table>
               <thead>
@@ -176,7 +209,11 @@ class InvoicesChange extends React.Component {
             </table>
           ) : null}
 
-          <h1>Total: {total}</h1>
+          <h1>
+            {notFoundProducts && notFoundProducts.length > 0
+              ? `Old total: ${oldTotal}, New total: ${total}`
+              : `Total: ${total}`}
+          </h1>
           <input type="submit" value="Change" />
         </form>
         <span onClick={() => close()}>Close</span>
@@ -243,7 +280,7 @@ class InvoicesChange extends React.Component {
 
   convertCustProduct = () => {
     const addedProducts = [];
-    const { custProducts } = this.state;
+    const { custProducts, notFoundProducts } = this.state;
     const { products } = this.props;
 
     if (custProducts && custProducts.length > 0) {
@@ -263,12 +300,17 @@ class InvoicesChange extends React.Component {
 
             addedProducts.push(product);
             continue end;
+          } else if (
+            j === prodLength - 1 &&
+            notFoundProducts.indexOf(custProducts[i].product_id) === -1
+          ) {
+            notFoundProducts.push(custProducts[i].product_id);
           }
         }
       }
     }
 
-    this.setState({ addedProducts });
+    this.setState({ addedProducts, notFoundProducts });
   };
 
   changeQty = (e, addedProduct) => {
