@@ -38,10 +38,10 @@ class Customers extends React.Component {
     const { customers } = this.props;
 
     return (
-      <div className={cust()}>
+      <div className="container">
         <h1>Customer list</h1>
         <span
-          className="btn-default"
+          className="btn btn-default"
           onClick={() => this.setState({ createCust: true })}
         >
           Create
