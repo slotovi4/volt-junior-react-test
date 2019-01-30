@@ -225,7 +225,14 @@ class InvoicesChange extends React.Component {
     e.preventDefault();
 
     const { invoice, invoiceItems } = this.props;
-    const { customerId, discount, total, addedProducts } = this.state;
+    const {
+      customerId,
+      discount,
+      total,
+      addedProducts,
+      notFoundProducts,
+      custProducts
+    } = this.state;
     const invoiceId = parseInt(invoice.id);
 
     // create new invoice
@@ -264,6 +271,20 @@ class InvoicesChange extends React.Component {
         await this.props.setInvoiceItem(invoiceId, item);
       }
     }
+
+    // delete not found items
+    const ntLength = notFoundProducts.length;
+    const ctLength = custProducts.length;
+
+    for (let i = 0; i < ntLength; i++) {
+      for (let j = 0; j < ctLength; j++) {
+        if (custProducts[j].product_id === notFoundProducts[i]) {
+          await this.props.deleteInvoiceItem(invoiceId, custProducts[j].id);
+        }
+      }
+    }
+
+    this.setState({ notFoundProducts: [] });
   };
 
   changeInput = e => {
