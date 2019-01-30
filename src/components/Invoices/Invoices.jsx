@@ -20,6 +20,8 @@ class Invoices extends React.Component {
   async componentWillMount() {
     await this.props.getAllInvoices();
     await this.props.getAllCustomers();
+
+    document.title = "Invoices";
   }
 
   render() {

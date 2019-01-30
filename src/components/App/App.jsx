@@ -16,14 +16,18 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <Router history={browserHistory}>
-          <div>
-            <Header />
-            <Switch>
-              <Route exact path="/customers" component={Customers} />
-              <Route exact path="/products" component={Products} />
-              <Route exact path="/" component={Invoices} />
-              <Route path="*" component={NotFound} />
-            </Switch>
+          <div className="Container">
+            <div className="row">
+              <div className="col-md-12">
+                <Header />
+                <Switch>
+                  <Route exact path="/customers" component={Customers} />
+                  <Route exact path="/products" component={Products} />
+                  <Route exact path="/" component={Invoices} />
+                  <Route path="*" component={NotFound} />
+                </Switch>
+              </div>
+            </div>
           </div>
         </Router>
       </Provider>

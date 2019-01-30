@@ -18,6 +18,8 @@ class Products extends React.Component {
   // get products
   async componentWillMount() {
     await this.props.getAllProducts();
+
+    document.title = "Products";
   }
 
   render() {

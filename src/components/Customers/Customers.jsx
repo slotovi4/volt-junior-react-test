@@ -22,6 +22,8 @@ class Customers extends React.Component {
   // get customers
   async componentWillMount() {
     await this.props.getAllCustomers();
+
+    document.title = "Customers";
   }
 
   render() {
