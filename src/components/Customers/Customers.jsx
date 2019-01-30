@@ -14,7 +14,6 @@ class Customers extends React.Component {
     createCust: false,
     deleteCust: false,
     deleteCustomerId: null,
-    changeCust: false,
     changedCust: null
   };
 
@@ -30,7 +29,6 @@ class Customers extends React.Component {
       createCust,
       deleteCust,
       deleteCustomerId,
-      changeCust,
       changedCust
     } = this.state;
     const { customers } = this.props;
@@ -67,9 +65,11 @@ class Customers extends React.Component {
                     <td>
                       <span
                         className="btn btn-default"
+                        data-toggle="modal"
+                        data-target="#changeCustomerModal"
+                        aria-labelledby="centerChangeCustomerModal"
                         onClick={() => {
                           this.setState({
-                            changeCust: true,
                             changedCust: customer
                           });
                         }}
@@ -127,14 +127,7 @@ class Customers extends React.Component {
           </div>
         ) : null}
 
-        {changeCust && changedCust ? (
-          <CustomersChange
-            close={() =>
-              this.setState({ changeCust: false, changedCust: null })
-            }
-            customer={changedCust}
-          />
-        ) : null}
+        <CustomersChange customer={changedCust} />
       </div>
     );
   }

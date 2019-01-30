@@ -9,51 +9,72 @@ class CustomersChange extends React.Component {
     phone: ""
   };
 
-  componentDidMount() {
-    const { customer } = this.props;
-
+  componentWillReceiveProps(nextProps) {
     this.setState({
-      name: customer.name,
-      address: customer.address,
-      phone: customer.phone
+      name: nextProps.customer.name,
+      address: nextProps.customer.address,
+      phone: nextProps.customer.phone
     });
   }
 
   render() {
-    const { close } = this.props;
     const { name, address, phone } = this.state;
 
     return (
-      <div>
-        <form onSubmit={this.change}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Customer name..."
-            onChange={this.changeInput}
-            required
-            defaultValue={name}
-          />
-          <input
-            type="text"
-            name="address"
-            placeholder="Customer address..."
-            onChange={this.changeInput}
-            required
-            defaultValue={address}
-          />
-          <input
-            type="tel"
-            name="phone"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            placeholder="Customer phone xxx-xxx-xxxx"
-            onChange={this.changeInput}
-            required
-            defaultValue={phone}
-          />
-          <input type="submit" value="Change" />
-        </form>
-        <span onClick={() => close()}>Close</span>
+      <div className="modal fade" id="changeCustomerModal" role="dialog">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content" id="centerChangeCustomerModal">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
+
+              <h4 className="modal-title">Change customer</h4>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={this.change}>
+                <div className="form-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="name"
+                    placeholder="Customer name..."
+                    onChange={this.changeInput}
+                    required
+                    value={name}
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="address"
+                    placeholder="Customer address..."
+                    onChange={this.changeInput}
+                    required
+                    value={address}
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    className="form-control"
+                    type="tel"
+                    name="phone"
+                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                    placeholder="Customer phone xxx-xxx-xxxx"
+                    onChange={this.changeInput}
+                    required
+                    value={phone}
+                  />
+                </div>
+
+                <button className="btn btn-primary" type="submit">
+                  Change
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
