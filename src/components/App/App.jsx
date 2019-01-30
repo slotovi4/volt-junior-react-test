@@ -11,6 +11,7 @@ import Products from "../Products/Products";
 import Invoices from "../Invoices/Invoices";
 import NotFound from "../NotFound/NotFound";
 import InvoicesCreate from "../Invoices/InvoicesCreate/InvoicesCreate";
+import InvoicesChange from "../Invoices/InvoicesChange/InvoicesChange";
 
 class App extends React.Component {
   render() {
@@ -23,6 +24,11 @@ class App extends React.Component {
               <Route exact path="/customers" component={Customers} />
               <Route exact path="/products" component={Products} />
               <Route exact path="/invoices/create" component={InvoicesCreate} />
+              <Route
+                exact
+                path="/invoices/change/:id"
+                component={InvoicesChange}
+              />
               <Route exact path="/" component={Invoices} />
               <Route path="*" component={NotFound} />
             </Switch>

@@ -5,17 +5,9 @@ import { getAllCustomers } from "../../actions/customersActions";
 import { Link } from "react-router-dom";
 
 //components
-// import InvoicesCreate from "./InvoicesCreate/InvoicesCreate";
-import InvoicesChange from "./InvoicesChange/InvoicesChange";
+// import InvoicesChange from "./InvoicesChange/InvoicesChange";
 
 class Invoices extends React.Component {
-  state = {
-    deleteInv: false,
-    deleteInvoiceId: null,
-    changeInv: false,
-    changedInv: null
-  };
-
   // get invoices
   async componentWillMount() {
     await this.props.getAllInvoices();
@@ -25,7 +17,6 @@ class Invoices extends React.Component {
   }
 
   render() {
-    const { changeInv, changedInv } = this.state;
     const { invoices, customers } = this.props;
 
     return (
@@ -62,17 +53,9 @@ class Invoices extends React.Component {
                         <td>{discount}</td>
                         <td>{total}</td>
                         <td>
-                          <span
-                            className="btn-default"
-                            onClick={() =>
-                              this.setState({
-                                changeInv: true,
-                                changedInv: invoice
-                              })
-                            }
-                          >
-                            Change
-                          </span>
+                          <Link to={`/invoices/change/${id}`}>
+                            <span className="btn-default">Change</span>
+                          </Link>
                         </td>
                         <td>
                           <span
@@ -93,23 +76,6 @@ class Invoices extends React.Component {
               : null}
           </tbody>
         </table>
-
-        {changeInv ? (
-          <InvoicesChange
-            invoice={changedInv}
-            close={() => this.setState({ changeInv: false })}
-            changeInvoiceOnSelect={customerId => {
-              const length = invoices.length;
-
-              for (let i = 0; i < length; i++) {
-                if (invoices[i].customer_id === parseInt(customerId)) {
-                  this.setState({ changedInv: invoices[i] });
-                  return;
-                }
-              }
-            }}
-          />
-        ) : null}
       </div>
     );
   }

@@ -5,9 +5,11 @@ import {
   changeInvoice,
   changeInvoiceItems,
   setInvoiceItem,
-  deleteInvoiceItem
+  deleteInvoiceItem,
+  getInvoice
 } from "../../../actions/invoicesActions";
 import { getAllProducts } from "../../../actions/productsActions";
+import { getAllCustomers } from "../../../actions/customersActions";
 
 class InvoicesChange extends React.Component {
   state = {
@@ -22,36 +24,13 @@ class InvoicesChange extends React.Component {
   };
 
   async componentWillMount() {
-    const { invoice, products } = this.props;
+    const { id } = this.props.match.params;
 
-    // get items
-    await this.props.getInvoiceItems(invoice.id);
-
-    // get products
-    if (!products || products.length < 1) {
+    if (id) {
+      await this.props.getInvoice(parseInt(id));
+      await this.props.getInvoiceItems(parseInt(id));
+      await this.props.getAllCustomers();
       await this.props.getAllProducts();
-    }
-
-    // set state
-    this.setState({
-      discount: parseFloat(this.props.invoice.discount),
-      customerId: this.props.invoice.customer_id,
-      custProducts: this.props.invoiceItems,
-      total: this.props.invoice.total,
-      oldTotal: null,
-      notFoundProducts: []
-    });
-
-    // convert products
-    this.convertCustProduct();
-  }
-
-  async componentWillUpdate(nextProps, nextState) {
-    const { invoice } = this.props;
-
-    if (invoice.id !== nextProps.invoice.id) {
-      // get items
-      await this.props.getInvoiceItems(nextProps.invoice.id);
 
       // set state
       this.setState({
@@ -69,7 +48,7 @@ class InvoicesChange extends React.Component {
   }
 
   render() {
-    const { invoices, customers, products, close } = this.props;
+    const { invoice, products } = this.props;
     const {
       discount,
       customerId,
@@ -78,97 +57,92 @@ class InvoicesChange extends React.Component {
       notFoundProducts,
       oldTotal
     } = this.state;
+    const customer = this.getCustomer();
 
-    return (
-      <div>
+    return invoice ? (
+      <div className="container">
         <h1>Edit invoice</h1>
         <form onSubmit={this.saveChanges}>
-          <span>Discount (%)</span>
-          <input
-            type="text"
-            name="discount"
-            placeholder="Invoice discount..."
-            value={discount}
-            onChange={this.changeInput}
-          />
-          {invoices && invoices.length > 0 ? (
-            <div>
-              <span>Customer</span>
-              <select
-                name="customerId"
-                placeholder="Invoice customer..."
-                onChange={this.changeInput}
-                value={customerId}
-                onChange={this.changeCustomer}
-                required
-              >
-                {customers.map(customer => {
-                  // get customer info
-                  let invCustomer = null;
-                  const invLength = invoices.length;
+          <div className="row">
+            <div className="col-md-6">
+              <div className="form-group">
+                <h5>Discount (%)</h5>
+                <input
+                  type="number"
+                  name="discount"
+                  placeholder="Invoice discount..."
+                  value={discount}
+                  onChange={this.changeInput}
+                  className="form-control"
+                  required
+                />
+              </div>
+              {customer ? (
+                <div className="form-group">
+                  <h5>Customer</h5>
+                  <select
+                    name="customerId"
+                    onChange={this.changeInput}
+                    value={customerId}
+                    onChange={this.changeCustomer}
+                    disabled
+                    required
+                    className="form-control"
+                  >
+                    <option key={customer.id + "_customer"} value={customer.id}>
+                      {customer.name}
+                    </option>
+                    )
+                  </select>
+                </div>
+              ) : null}
 
-                  for (let i = 0; i < invLength; i++) {
-                    if (invoices[i].customer_id === customer.id) {
-                      invCustomer = customer;
-                    }
-                  }
-
-                  // if customer
-                  if (invCustomer !== null) {
-                    return (
-                      <option
-                        key={invCustomer.id + "_customer"}
-                        value={invCustomer.id}
-                      >
-                        {invCustomer.name}
+              {products && products.length > 0 ? (
+                <div className="form-group">
+                  <h5>Add product</h5>
+                  <select
+                    name="productId"
+                    placeholder="Invoice product..."
+                    onChange={this.changeInput}
+                    defaultValue="hide"
+                    className="form-control"
+                    required
+                    style={{ width: "auto", float: "left" }}
+                  >
+                    <option value="hide" disabled hidden>
+                      Choose here
+                    </option>
+                    {products.map(product => (
+                      <option key={product.id + "_product"} value={product.id}>
+                        {product.name}
                       </option>
-                    );
-                  } else {
-                    return null;
-                  }
-                })}
-              </select>
-            </div>
-          ) : null}
+                    ))}
+                  </select>
+                  <span className="btn btn-default" onClick={this.addProduct}>
+                    Add
+                  </span>
+                </div>
+              ) : null}
 
-          {products && products.length > 0 ? (
-            <div>
-              <span>Add product</span>
-              <select
-                name="productId"
-                placeholder="Invoice product..."
-                onChange={this.changeInput}
-                defaultValue="hide"
-                required
-              >
-                <option value="hide" disabled hidden>
-                  Choose here
-                </option>
-                {products.map(product => (
-                  <option key={product.id + "_product"} value={product.id}>
-                    {product.name}
-                  </option>
-                ))}
-              </select>
-              <span onClick={this.addProduct}>Add</span>
+              <div className="form-group">
+                {notFoundProducts && notFoundProducts.length > 0
+                  ? notFoundProducts.map(notFoundProductId => (
+                      <h5 key={notFoundProductId}>
+                        Products deleted(id): {notFoundProductId}
+                      </h5>
+                    ))
+                  : null}
+              </div>
             </div>
-          ) : null}
-
-          {notFoundProducts && notFoundProducts.length > 0
-            ? notFoundProducts.map(notFoundProductId => (
-                <span key={notFoundProductId}>
-                  Products deleted(id): {notFoundProductId}
-                </span>
-              ))
-            : null}
+          </div>
 
           {addedProducts && addedProducts.length > 0 ? (
-            <table>
+            <table className="table">
               <thead>
                 <tr>
-                  <td>Name</td>
-                  <td>Price</td>
-                  <td>Qty</td>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Qty</th>
                 </tr>
               </thead>
 
@@ -188,7 +162,12 @@ class InvoicesChange extends React.Component {
                         />
                       </td>
                       <td>
-                        <span onClick={() => this.deleteProduct(index)}>x</span>
+                        <span
+                          className="btn btn-default btn-sm"
+                          onClick={() => this.deleteProduct(index)}
+                        >
+                          x
+                        </span>
                       </td>
                     </tr>
                   );
@@ -202,11 +181,12 @@ class InvoicesChange extends React.Component {
               ? `Old total: ${oldTotal}, New total: ${total}`
               : `Total: ${total}`}
           </h1>
-          <input type="submit" value="Change" />
+          <button className="btn btn-primary" type="submit">
+            Change
+          </button>
         </form>
-        <span onClick={() => close()}>Close</span>
       </div>
-    );
+    ) : null;
   }
 
   saveChanges = async e => {
@@ -273,6 +253,22 @@ class InvoicesChange extends React.Component {
     }
 
     this.setState({ notFoundProducts: [], oldTotal: null });
+
+    this.props.history.push("/");
+  };
+
+  getCustomer = () => {
+    const { customers, invoice } = this.props;
+
+    if (customers && invoice) {
+      const custLength = customers.length;
+
+      for (let i = 0; i < custLength; i++) {
+        if (customers[i].id === invoice.customer_id) {
+          return customers[i];
+        }
+      }
+    }
   };
 
   changeInput = e => {
@@ -416,6 +412,7 @@ class InvoicesChange extends React.Component {
 const mapStateToProps = state => ({
   invoiceItems: state.invoice.invoiceItems,
   invoices: state.invoice.invoices,
+  invoice: state.invoice.invoice,
   customers: state.customer.customers,
   products: state.product.products
 });
@@ -428,6 +425,8 @@ export default connect(
     changeInvoice,
     changeInvoiceItems,
     setInvoiceItem,
-    deleteInvoiceItem
+    deleteInvoiceItem,
+    getInvoice,
+    getAllCustomers
   }
 )(InvoicesChange);

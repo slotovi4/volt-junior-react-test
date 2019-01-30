@@ -6,7 +6,8 @@ import {
   SET_INVOICE_ITEM,
   GET_INVOICE_ITEMS,
   CHANGE_INVOICE_ITEMS,
-  DELETE_INVOICE_ITEM
+  DELETE_INVOICE_ITEM,
+  GET_INVOICE
 } from "../actions/types";
 
 const initialState = {
@@ -64,6 +65,11 @@ export default (state = initialState, action) => {
         invoiceItems: state.invoiceItems.filter(
           item => item.id !== action.payload.id
         )
+      };
+    case GET_INVOICE:
+      return {
+        ...state,
+        invoice: action.payload
       };
     default:
       return state;
