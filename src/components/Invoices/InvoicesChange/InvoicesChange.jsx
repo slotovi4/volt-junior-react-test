@@ -41,15 +41,10 @@ class InvoicesChange extends React.Component {
       notFoundProducts: []
     });
 
+    console.log(1);
+
     // convert products
     this.convertCustProduct();
-
-    // set new total
-    const { notFoundProducts, total } = this.state;
-    if (notFoundProducts && notFoundProducts.length > 0) {
-      this.setState({ oldTotal: total });
-      this.calcTotal();
-    }
   }
 
   async componentWillUpdate(nextProps, nextState) {
@@ -68,15 +63,10 @@ class InvoicesChange extends React.Component {
         notFoundProducts: []
       });
 
+      console.log(2);
+
       // convert products
       this.convertCustProduct();
-
-      // set new total
-      const { notFoundProducts, total } = this.state;
-      if (notFoundProducts && notFoundProducts.length > 0) {
-        this.setState({ oldTotal: total });
-        this.calcTotal();
-      }
     }
   }
 
@@ -332,6 +322,13 @@ class InvoicesChange extends React.Component {
     }
 
     this.setState({ addedProducts, notFoundProducts });
+
+    // set new total
+    if (notFoundProducts && notFoundProducts.length > 0) {
+      this.setState({ oldTotal: this.props.invoice.total });
+    }
+
+    this.calcTotal();
   };
 
   changeQty = (e, addedProduct) => {
