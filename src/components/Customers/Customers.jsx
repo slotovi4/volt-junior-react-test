@@ -4,7 +4,6 @@ import {
   getAllCustomers,
   deteleCustomer
 } from "../../actions/customersActions";
-import { cn } from "@bem-react/classname";
 
 // components
 import CustomersCreate from "./CustomersCreate/CustomersCreate";
@@ -27,7 +26,6 @@ class Customers extends React.Component {
   }
 
   render() {
-    const cust = cn("Customer");
     const {
       createCust,
       deleteCust,
