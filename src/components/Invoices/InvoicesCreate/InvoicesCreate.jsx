@@ -4,7 +4,8 @@ import { getAllCustomers } from "../../../actions/customersActions";
 import { getAllProducts } from "../../../actions/productsActions";
 import {
   createNewInvoice,
-  setInvoiceItem
+  setInvoiceItem,
+  getAllInvoices
 } from "../../../actions/invoicesActions";
 
 class InvoicesCreate extends React.Component {
@@ -18,129 +19,150 @@ class InvoicesCreate extends React.Component {
 
   // get customers & products
   async componentWillMount() {
+    await this.props.getAllInvoices();
     await this.props.getAllCustomers();
     await this.props.getAllProducts();
   }
 
   render() {
     const { addedProducts, total } = this.state;
-    const { close, customers, products, invoices } = this.props;
+    const { customers, products, invoices } = this.props;
 
     return (
-      <div>
+      <div className="container">
         <h1>Create invoice</h1>
         <form onSubmit={this.createInvoice}>
-          <span>Discount (%)</span>
-          <input
-            type="text"
-            name="discount"
-            placeholder="Invoice discount..."
-            onChange={this.changeInput}
-          />
+          <div className="row">
+            <div className="col-md-6">
+              <div className="form-group">
+                <h5>Discount (%)</h5>
+                <input
+                  type="number"
+                  name="discount"
+                  placeholder="Invoice discount..."
+                  onChange={this.changeInput}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-          {customers && customers.length > 0 ? (
-            <div>
-              <span>Customer</span>
-              <select
-                name="customerId"
-                placeholder="Invoice customer..."
-                onChange={this.changeInput}
-                defaultValue="hide"
-                required
-              >
-                <option value="hide" disabled hidden>
-                  Choose here
-                </option>
-                {customers.map(customer => {
-                  // check added invoice
-                  const invLength = invoices.length;
-                  let hasInvoice = false;
-                  for (let i = 0; i < invLength; i++) {
-                    if (invoices[i].customer_id === customer.id) {
-                      hasInvoice = true;
-                    }
-                  }
+              {customers && customers.length > 0 ? (
+                <div className="form-group">
+                  <h5>Customer</h5>
+                  <select
+                    name="customerId"
+                    onChange={this.changeInput}
+                    defaultValue="hide"
+                    className="form-control"
+                    required
+                  >
+                    <option value="hide" hidden>
+                      Choose customer
+                    </option>
+                    {customers.map(customer => {
+                      // check added invoice
+                      const invLength = invoices.length;
+                      let hasInvoice = false;
+                      for (let i = 0; i < invLength; i++) {
+                        if (invoices[i].customer_id === customer.id) {
+                          hasInvoice = true;
+                        }
+                      }
 
-                  if (hasInvoice) {
-                    return null;
-                  } else {
-                    return (
-                      <option
-                        key={customer.id + "_customer"}
-                        value={customer.id}
-                      >
-                        {customer.name}
+                      if (hasInvoice) {
+                        return null;
+                      } else {
+                        return (
+                          <option
+                            key={customer.id + "_customer"}
+                            value={customer.id}
+                          >
+                            {customer.name}
+                          </option>
+                        );
+                      }
+                    })}
+                  </select>
+                </div>
+              ) : null}
+
+              {products && products.length > 0 ? (
+                <div className="form-group">
+                  <h5>Add product</h5>
+                  <select
+                    name="productId"
+                    placeholder="Invoice product..."
+                    onChange={this.changeInput}
+                    defaultValue="hide"
+                    className="form-control"
+                    style={{ width: "auto", float: "left" }}
+                    required
+                  >
+                    <option value="hide" hidden>
+                      Choose product
+                    </option>
+                    {products.map(product => (
+                      <option key={product.id + "_product"} value={product.id}>
+                        {product.name}
                       </option>
-                    );
-                  }
-                })}
-              </select>
+                    ))}
+                  </select>
+                  <span className="btn btn-default" onClick={this.addProduct}>
+                    Add
+                  </span>
+                </div>
+              ) : null}
             </div>
-          ) : null}
-
-          {products && products.length > 0 ? (
-            <div>
-              <span>Add product</span>
-              <select
-                name="productId"
-                placeholder="Invoice product..."
-                onChange={this.changeInput}
-                defaultValue="hide"
-                required
-              >
-                <option value="hide" disabled hidden>
-                  Choose here
-                </option>
-                {products.map(product => (
-                  <option key={product.id + "_product"} value={product.id}>
-                    {product.name}
-                  </option>
-                ))}
-              </select>
-              <span onClick={this.addProduct}>Add</span>
-            </div>
-          ) : null}
+          </div>
 
           {addedProducts && addedProducts.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <td>Name</td>
-                  <td>Price</td>
-                  <td>Qty</td>
-                </tr>
-              </thead>
+            <div className="row">
+              <div className="col-md-12">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Price</th>
+                      <th>Qty</th>
+                    </tr>
+                  </thead>
 
-              <tbody>
-                {addedProducts.map((addedProduct, index) => (
-                  <tr key={index + "_addedProduct"}>
-                    <td>{addedProduct.name}</td>
-                    <td>{addedProduct.price}</td>
-                    <td>
-                      <input
-                        type="number"
-                        placeholder="qty..."
-                        value={addedProduct.qty}
-                        min={1}
-                        onChange={e => this.changeQty(e, addedProduct)}
-                      />
-                    </td>
-                    <td>
-                      <span onClick={index => this.deleteProduct(index)}>
-                        x
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                  <tbody>
+                    {addedProducts.map((addedProduct, index) => (
+                      <tr key={index + "_addedProduct"}>
+                        <td>{addedProduct.name}</td>
+                        <td>{addedProduct.price}</td>
+                        <td>
+                          <input
+                            type="number"
+                            placeholder="qty..."
+                            value={addedProduct.qty}
+                            min={1}
+                            onChange={e => this.changeQty(e, addedProduct)}
+                          />
+                        </td>
+                        <td>
+                          <span
+                            className="btn btn-default btn-sm"
+                            onClick={index => this.deleteProduct(index)}
+                          >
+                            x
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           ) : null}
 
-          <h1>Total: {total}</h1>
+          <h2>Total: {total}</h2>
 
-          <input type="submit" value="Create" />
+          <button className="btn btn-primary" type="submit">
+            Create
+          </button>
         </form>
-        <span onClick={() => close()}>Close</span>
       </div>
     );
   }
@@ -261,6 +283,8 @@ class InvoicesCreate extends React.Component {
         }
       }
     }
+
+    this.props.history.push("/");
   };
 }
 
@@ -276,6 +300,7 @@ export default connect(
     getAllCustomers,
     getAllProducts,
     createNewInvoice,
-    setInvoiceItem
+    setInvoiceItem,
+    getAllInvoices
   }
 )(InvoicesCreate);

@@ -2,14 +2,14 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { getAllInvoices, deteleInvoice } from "../../actions/invoicesActions";
 import { getAllCustomers } from "../../actions/customersActions";
+import { Link } from "react-router-dom";
 
 //components
-import InvoicesCreate from "./InvoicesCreate/InvoicesCreate";
+// import InvoicesCreate from "./InvoicesCreate/InvoicesCreate";
 import InvoicesChange from "./InvoicesChange/InvoicesChange";
 
 class Invoices extends React.Component {
   state = {
-    createInv: false,
     deleteInv: false,
     deleteInvoiceId: null,
     changeInv: false,
@@ -25,18 +25,16 @@ class Invoices extends React.Component {
   }
 
   render() {
-    const { createInv, changeInv, changedInv } = this.state;
+    const { changeInv, changedInv } = this.state;
     const { invoices, customers } = this.props;
 
     return (
       <div>
         <h1>Invoice list</h1>
-        <span
-          className="btn-default"
-          onClick={() => this.setState({ createInv: true })}
-        >
-          Create
-        </span>
+        <Link to="/invoices/create">
+          <span className="btn-default">Create</span>
+        </Link>
+
         <table>
           <thead>
             <tr>
@@ -95,13 +93,6 @@ class Invoices extends React.Component {
               : null}
           </tbody>
         </table>
-
-        {createInv ? (
-          <InvoicesCreate
-            close={() => this.setState({ createInv: false })}
-            invoices={invoices}
-          />
-        ) : null}
 
         {changeInv ? (
           <InvoicesChange
