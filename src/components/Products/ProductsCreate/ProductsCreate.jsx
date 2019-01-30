@@ -48,9 +48,6 @@ class ProductsCreate extends React.Component {
     const { products } = this.props;
     const newProduct = {};
 
-    // get current date
-    const createDate = this.getCurrentDate();
-
     // get next id
     const id = products[products.length - 1].id + 1;
 
@@ -58,43 +55,8 @@ class ProductsCreate extends React.Component {
     newProduct.id = id;
     newProduct.name = name;
     newProduct.price = price;
-    newProduct.createdAt = createDate;
-    newProduct.updatedAt = "";
 
     this.props.createNewProduct(newProduct);
-  };
-
-  getCurrentDate = () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    let month = currentDate.getDate();
-    let day = currentDate.getDay();
-    let hour = currentDate.getHours();
-    let min = currentDate.getMinutes();
-    let sec = currentDate.getSeconds();
-    const ms = currentDate.getMilliseconds();
-
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
-    if (hour < 10) hour = "0" + hour;
-    if (sec < 10) sec = "0" + sec;
-
-    const date =
-      year +
-      "-" +
-      month +
-      "-" +
-      day +
-      "T" +
-      hour +
-      ":" +
-      min +
-      ":" +
-      sec +
-      "." +
-      ms;
-
-    return date;
   };
 }
 

@@ -42,8 +42,6 @@ class InvoicesChange extends React.Component {
       notFoundProducts: []
     });
 
-    console.log(1);
-
     // convert products
     this.convertCustProduct();
   }
@@ -64,8 +62,6 @@ class InvoicesChange extends React.Component {
         oldTotal: null,
         notFoundProducts: []
       });
-
-      console.log(2);
 
       // convert products
       this.convertCustProduct();
@@ -256,10 +252,10 @@ class InvoicesChange extends React.Component {
       }
 
       if (has) {
-        // если предмет существует то изменяю
+        // if item present -> change item
         await this.props.changeInvoiceItems(invoiceId, item);
       } else {
-        // иначе вызываю setInvoiceItem
+        // else -> set item
         await this.props.setInvoiceItem(invoiceId, item);
       }
     }
@@ -324,11 +320,6 @@ class InvoicesChange extends React.Component {
     }
 
     this.setState({ addedProducts, notFoundProducts });
-
-    // set new total
-    // if (notFoundProducts && notFoundProducts.length > 0) {
-    //   this.setState({ oldTotal: this.props.invoice.total });
-    // }
 
     this.calcTotal();
   };

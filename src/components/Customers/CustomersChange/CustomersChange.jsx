@@ -68,52 +68,15 @@ class CustomersChange extends React.Component {
       address !== customer.address ||
       phone !== customer.phone
     ) {
-      const currentDate = this.getCurrentDate();
-
       const updatedCustomer = {};
 
       updatedCustomer.name = name;
       updatedCustomer.address = address;
       updatedCustomer.phone = phone;
       updatedCustomer.id = customer.id;
-      updatedCustomer.createdAt = customer.createdAt;
-      updatedCustomer.updatedAt = currentDate;
 
       this.props.changeCustomer(updatedCustomer);
     }
-  };
-
-  getCurrentDate = () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    let month = currentDate.getDate();
-    let day = currentDate.getDay();
-    let hour = currentDate.getHours();
-    let min = currentDate.getMinutes();
-    let sec = currentDate.getSeconds();
-    const ms = currentDate.getMilliseconds();
-
-    if (month < 10) month = "0" + month;
-    if (day < 10) day = "0" + day;
-    if (hour < 10) hour = "0" + hour;
-    if (sec < 10) sec = "0" + sec;
-
-    const date =
-      year +
-      "-" +
-      month +
-      "-" +
-      day +
-      "T" +
-      hour +
-      ":" +
-      min +
-      ":" +
-      sec +
-      "." +
-      ms;
-
-    return date;
   };
 
   changeInput = e => {
