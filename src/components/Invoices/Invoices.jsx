@@ -111,7 +111,7 @@ class Invoices extends React.Component {
           <InvoicesChange
             invoice={changedInv}
             close={() => this.setState({ changeInv: false })}
-            changeInvoice={customerId => {
+            changeInvoiceOnSelect={customerId => {
               const length = invoices.length;
 
               for (let i = 0; i < length; i++) {

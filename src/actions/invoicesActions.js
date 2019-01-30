@@ -4,7 +4,8 @@ import {
   DELETE_INVOICE,
   CHANGE_INVOICE,
   SET_INVOICE_ITEM,
-  GET_INVOICE_ITEMS
+  GET_INVOICE_ITEMS,
+  CHANGE_INVOICE_ITEMS
 } from "./types";
 import axios from "axios";
 
@@ -18,11 +19,11 @@ export const getAllInvoices = () => async dispatch => {
 };
 
 export const createNewInvoice = newInvoice => async dispatch => {
-  await axios.post(`/api/invoices/`, newInvoice);
+  const invoice = await axios.post(`/api/invoices/`, newInvoice);
 
   dispatch({
     type: CREATE_NEW_INVOICE,
-    payload: newInvoice
+    payload: invoice.data
   });
 };
 
@@ -45,10 +46,11 @@ export const changeInvoice = invoice => async dispatch => {
 };
 
 export const setInvoiceItem = (invoiceId, item) => async dispatch => {
-  await axios.post(`/api/invoices/${invoiceId}/items`, item);
+  const addedItem = await axios.post(`/api/invoices/${invoiceId}/items`, item);
 
   dispatch({
-    type: SET_INVOICE_ITEM
+    type: SET_INVOICE_ITEM,
+    payload: addedItem.data
   });
 };
 
@@ -58,5 +60,17 @@ export const getInvoiceItems = invoiceId => async dispatch => {
   dispatch({
     type: GET_INVOICE_ITEMS,
     payload: invoiceItems.data
+  });
+};
+
+export const changeInvoiceItems = (invoiceId, item) => async dispatch => {
+  const invoiceItem = await axios.put(
+    `/api/invoices/${invoiceId}/items/${item.id}`,
+    item
+  );
+
+  dispatch({
+    type: CHANGE_INVOICE_ITEMS,
+    payload: invoiceItem.data
   });
 };

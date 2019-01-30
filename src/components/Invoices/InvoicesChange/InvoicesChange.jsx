@@ -1,6 +1,11 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { getInvoiceItems } from "../../../actions/invoicesActions";
+import {
+  getInvoiceItems,
+  changeInvoice,
+  changeInvoiceItems,
+  setInvoiceItem
+} from "../../../actions/invoicesActions";
 import { getAllProducts } from "../../../actions/productsActions";
 
 class InvoicesChange extends React.Component {
@@ -14,17 +19,19 @@ class InvoicesChange extends React.Component {
   };
 
   async componentWillMount() {
-    const { invoice } = this.props;
+    const { invoice, products } = this.props;
 
     // get items
     await this.props.getInvoiceItems(invoice.id);
 
     // get products
-    await this.props.getAllProducts();
+    if (!products || products.length < 1) {
+      await this.props.getAllProducts();
+    }
 
     // set state
     this.setState({
-      discount: this.props.invoice.discount,
+      discount: parseFloat(this.props.invoice.discount),
       customerId: this.props.invoice.customer_id,
       custProducts: this.props.invoiceItems,
       total: this.props.invoice.total
@@ -43,7 +50,7 @@ class InvoicesChange extends React.Component {
 
       // set state
       this.setState({
-        discount: this.props.invoice.discount,
+        discount: parseFloat(this.props.invoice.discount),
         customerId: this.props.invoice.customer_id,
         custProducts: this.props.invoiceItems,
         total: this.props.invoice.total
@@ -61,7 +68,7 @@ class InvoicesChange extends React.Component {
     return (
       <div>
         <h1>Edit invoice</h1>
-        <form onSubmit={this.createInvoice}>
+        <form onSubmit={this.saveChanges}>
           <span>Discount (%)</span>
           <input
             type="text"
@@ -171,12 +178,57 @@ class InvoicesChange extends React.Component {
           ) : null}
 
           <h1>Total: {total}</h1>
-          <input type="submit" value="Create" />
+          <input type="submit" value="Change" />
         </form>
         <span onClick={() => close()}>Close</span>
       </div>
     );
   }
+
+  saveChanges = async e => {
+    e.preventDefault();
+
+    const { invoice, invoiceItems } = this.props;
+    const { customerId, discount, total, addedProducts } = this.state;
+    const invoiceId = parseInt(invoice.id);
+
+    // create new invoice
+    const changedInvoice = {};
+    changedInvoice.id = invoiceId;
+    changedInvoice.customer_id = customerId;
+    changedInvoice.discount = discount;
+    changedInvoice.total = total;
+
+    await this.props.changeInvoice(changedInvoice);
+
+    // create new invoice items
+    const prodLength = addedProducts.length;
+    for (let i = 0; i < prodLength; i++) {
+      const item = {};
+
+      item.id = addedProducts[i].id;
+      item.invoice_id = invoiceId;
+      item.product_id = addedProducts[i].product_id;
+      item.quantity = addedProducts[i].qty;
+
+      let has = false;
+      const itemsLength = invoiceItems.length;
+      for (let j = 0; j < itemsLength; j++) {
+        if (invoiceItems[j].product_id === item.product_id) {
+          has = true;
+          break;
+        }
+      }
+
+      if (has) {
+        // если предмет существует то изменяю
+        await this.props.changeInvoiceItems(invoiceId, item);
+      } else {
+        // иначе вызываю setInvoiceItem
+        await this.props.setInvoiceItem(invoiceId, item);
+      }
+    }
+  };
 
   changeInput = e => {
     const value = e.target.value;
@@ -187,7 +239,7 @@ class InvoicesChange extends React.Component {
 
   changeCustomer = e => {
     const customerId = e.target.value;
-    this.props.changeInvoice(customerId);
+    this.props.changeInvoiceOnSelect(customerId);
   };
 
   convertCustProduct = () => {
@@ -203,9 +255,14 @@ class InvoicesChange extends React.Component {
         // get product info
         for (let j = 0; j < prodLength; j++) {
           if (products[j].id === custProducts[i].product_id) {
-            products[j].qty = custProducts[i].quantity;
-            addedProducts.push(products[j]);
+            const product = {};
+            product.id = custProducts[i].id;
+            product.product_id = custProducts[i].product_id;
+            product.qty = custProducts[i].quantity;
+            product.name = products[j].name;
+            product.price = products[j].price;
 
+            addedProducts.push(product);
             continue end;
           }
         }
@@ -260,7 +317,7 @@ class InvoicesChange extends React.Component {
       // check dublicate
       const addLength = addedProducts.length;
       for (let i = 0; i < addLength; i++) {
-        if (addedProducts[i].id === productId) {
+        if (addedProducts[i].product_id === productId) {
           addedProducts[i].qty += 1;
 
           this.setState({ addedProducts });
@@ -269,12 +326,17 @@ class InvoicesChange extends React.Component {
         }
       }
 
-      // if new prodect
+      // if new product
       for (let i = 0; i < length; i++) {
         if (productId === products[i].id) {
           // set product qty
-          products[i].qty = 1;
-          addedProducts.push(products[i]);
+          const product = {};
+          product.product_id = products[i].id;
+          product.price = products[i].price;
+          product.name = products[i].name;
+          product.qty = 1;
+
+          addedProducts.push(product);
 
           // set state & calc total
           this.setState({ addedProducts });
@@ -297,6 +359,9 @@ export default connect(
   mapStateToProps,
   {
     getInvoiceItems,
-    getAllProducts
+    getAllProducts,
+    changeInvoice,
+    changeInvoiceItems,
+    setInvoiceItem
   }
 )(InvoicesChange);

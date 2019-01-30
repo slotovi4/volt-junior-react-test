@@ -4,10 +4,13 @@ import {
   DELETE_INVOICE,
   CHANGE_INVOICE,
   SET_INVOICE_ITEM,
-  GET_INVOICE_ITEMS
+  GET_INVOICE_ITEMS,
+  CHANGE_INVOICE_ITEMS
 } from "../actions/types";
 
-const initialState = {};
+const initialState = {
+  invoiceItems: []
+};
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -36,11 +39,23 @@ export default (state = initialState, action) => {
         )
       };
     case SET_INVOICE_ITEM:
-      return state;
+      return {
+        ...state,
+        invoiceItems: state.invoiceItems.map(item =>
+          item.product_id === action.payload.product_id ? action.payload : item
+        )
+      };
     case GET_INVOICE_ITEMS:
       return {
         ...state,
         invoiceItems: action.payload
+      };
+    case CHANGE_INVOICE_ITEMS:
+      return {
+        ...state,
+        invoiceItems: state.invoiceItems.map(item =>
+          item.id === action.payload.id ? action.payload : item
+        )
       };
     default:
       return state;

@@ -221,37 +221,44 @@ class InvoicesCreate extends React.Component {
     this.calcTotal();
   };
 
-  createInvoice = e => {
+  createInvoice = async e => {
     e.preventDefault();
-    const { invoices } = this.props;
-    const { addedProducts, discount, customerId, total } = this.state;
+    // const { invoices } = this.props;
+    const { addedProducts, discount, total } = this.state;
+    const customerId = parseInt(this.state.customerId);
 
-    if (discount && discount !== "" && customerId && customerId !== "") {
+    if (discount && discount !== "" && customerId) {
       // create new invoice
       const newInvoice = {};
-      const id =
-        invoices && invoices.length > 0
-          ? invoices[invoices.length - 1].id + 1
-          : 0;
-
-      newInvoice.id = id;
-      newInvoice.customer_id = parseInt(customerId);
-      newInvoice.discount = discount;
+      newInvoice.customer_id = customerId;
+      newInvoice.discount = parseInt(discount);
       newInvoice.total = total;
 
       // put new invoice
-      this.props.createNewInvoice(newInvoice);
+      await this.props.createNewInvoice(newInvoice);
+
+      const { invoices } = this.props;
+      const invLength = invoices.length;
+      let invoiceId = null;
+
+      for (let i = 0; i < invLength; i++) {
+        if (invoices[i].customer_id === customerId) {
+          invoiceId = invoices[i].id;
+        }
+      }
 
       // put invoice items
-      const prodLength = addedProducts.length;
-      for (let i = 0; i < prodLength; i++) {
-        const item = {};
+      if (invoiceId) {
+        const prodLength = addedProducts.length;
+        for (let i = 0; i < prodLength; i++) {
+          const item = {};
 
-        item.invoice_id = id;
-        item.product_id = addedProducts[i].id;
-        item.quantity = addedProducts[i].qty;
+          item.invoice_id = invoiceId;
+          item.product_id = addedProducts[i].id;
+          item.quantity = addedProducts[i].qty;
 
-        this.props.setInvoiceItem(id, item);
+          await this.props.setInvoiceItem(invoiceId, item);
+        }
       }
     }
   };
