@@ -9,28 +9,52 @@ class ProductsCreate extends React.Component {
   };
 
   render() {
-    const { close } = this.props;
+    const { name, price } = this.state;
 
     return (
-      <div>
-        <form onSubmit={this.createProduct}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Product name..."
-            onChange={this.changeInput}
-            required
-          />
-          <input
-            type="number"
-            name="price"
-            placeholder="Product price..."
-            onChange={this.changeInput}
-            required
-          />
-          <input type="submit" value="Create" />
-        </form>
-        <span onClick={() => close()}>Close</span>
+      <div className="modal fade" id="createProductModal" role="dialog">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content" id="createProductCenterModal">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal">
+                &times;
+              </button>
+
+              <h4 className="modal-title">Create product</h4>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={this.createProduct}>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Product name..."
+                    onChange={this.changeInput}
+                    className="form-control"
+                    value={name}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <input
+                    type="number"
+                    name="price"
+                    placeholder="Product price..."
+                    onChange={this.changeInput}
+                    className="form-control"
+                    value={price}
+                    required
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-primary">
+                  Create
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -57,6 +81,9 @@ class ProductsCreate extends React.Component {
     newProduct.price = price;
 
     this.props.createNewProduct(newProduct);
+
+    // clear state
+    this.setState({ name: "", price: "" });
   };
 }
 

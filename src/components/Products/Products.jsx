@@ -8,7 +8,6 @@ import ProductsChange from "./ProductsChange/ProductsChange";
 
 class Products extends React.Component {
   state = {
-    createProduct: false,
     deleteProd: false,
     deleteProductId: null,
     changeProd: false,
@@ -23,24 +22,24 @@ class Products extends React.Component {
   }
 
   render() {
-    const {
-      createProduct,
-      deleteProd,
-      deleteProductId,
-      changeProd,
-      changedProd
-    } = this.state;
+    const { deleteProd, deleteProductId, changeProd, changedProd } = this.state;
     const { products } = this.props;
 
     return (
-      <div>
-        <h1>Product list</h1>
-        <span
-          className="btn-default"
-          onClick={() => this.setState({ createProduct: true })}
-        >
-          Create
-        </span>
+      <div className="container">
+        <div>
+          <h1>
+            Product list{" "}
+            <span
+              className="btn btn-default"
+              data-toggle="modal"
+              data-target="#createProductModal"
+              aria-labelledby="createProductCenterModal"
+            >
+              Create
+            </span>
+          </h1>
+        </div>
         <table>
           <thead>
             <tr>
@@ -87,12 +86,8 @@ class Products extends React.Component {
               : null}
           </tbody>
         </table>
-        {createProduct ? (
-          <ProductsCreate
-            close={() => this.setState({ createProduct: false })}
-            products={products}
-          />
-        ) : null}
+
+        <ProductsCreate products={products} />
 
         {deleteProd && deleteProductId ? (
           <div>
