@@ -1,18 +1,15 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import {
-  getAllCustomers,
-  deteleCustomer
-} from "../../actions/customersActions";
+import { getAllCustomers } from "../../actions/customersActions";
 
 // components
 import CustomersCreate from "./CustomersCreate/CustomersCreate";
 import CustomersChange from "./CustomersChange/CustomersChange";
+import CustomersDelete from "./CustomersDelete/CustomersDelete";
 
 class Customers extends React.Component {
   state = {
     createCust: false,
-    deleteCust: false,
     deleteCustomerId: null,
     changedCust: null
   };
@@ -80,9 +77,11 @@ class Customers extends React.Component {
                     <td>
                       <span
                         className="btn btn-default"
+                        data-toggle="modal"
+                        data-target="#deleteCustomerModal"
+                        aria-labelledby="centerDeleteCustomerModal"
                         onClick={() =>
                           this.setState({
-                            deleteCust: true,
                             deleteCustomerId: customer.id
                           })
                         }
@@ -103,29 +102,10 @@ class Customers extends React.Component {
           />
         ) : null}
 
-        {deleteCust && deleteCustomerId ? (
-          <div>
-            <span>Delete?</span>
-            <span
-              onClick={async () => {
-                await this.props.deteleCustomer(deleteCustomerId);
-                this.setState({
-                  deleteCust: false,
-                  deleteCustomerId: null
-                });
-              }}
-            >
-              yes
-            </span>
-            <span
-              onClick={() =>
-                this.setState({ deleteCust: false, deleteCustomerId: null })
-              }
-            >
-              no
-            </span>
-          </div>
-        ) : null}
+        <CustomersDelete
+          customerId={deleteCustomerId}
+          close={() => this.setState({ deleteCustomerId: null })}
+        />
 
         <CustomersChange customer={changedCust} />
       </div>
@@ -140,7 +120,6 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {
-    getAllCustomers,
-    deteleCustomer
+    getAllCustomers
   }
 )(Customers);
