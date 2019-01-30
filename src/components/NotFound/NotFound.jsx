@@ -8,8 +8,11 @@ class NotFound extends React.Component {
 
   render() {
     return (
-      <div>
-        Page NotFound. Go to <Link to="/">home</Link>?
+      <div className="container">
+        <h1 className="text-center">
+          {" "}
+          Page NotFound. Go to <Link to="/">HOME</Link>?
+        </h1>
       </div>
     );
   }
