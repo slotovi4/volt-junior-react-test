@@ -13,7 +13,7 @@ import { getAllCustomers } from "../../../actions/customersActions";
 
 class InvoicesChange extends React.Component {
   state = {
-    discount: "",
+    discount: 0,
     customerId: "",
     productId: "",
     custProducts: [],
@@ -74,6 +74,8 @@ class InvoicesChange extends React.Component {
                   value={discount}
                   onChange={this.changeInput}
                   className="form-control"
+                  min={0}
+                  max={100}
                   required
                 />
               </div>
@@ -82,9 +84,8 @@ class InvoicesChange extends React.Component {
                   <h5>Customer</h5>
                   <select
                     name="customerId"
-                    onChange={this.changeInput}
                     value={customerId}
-                    onChange={this.changeCustomer}
+                    onChange={this.changeInput}
                     disabled
                     required
                     className="form-control"
@@ -103,10 +104,10 @@ class InvoicesChange extends React.Component {
                   <select
                     name="productId"
                     placeholder="Invoice product..."
-                    onChange={this.changeInput}
                     defaultValue="hide"
                     className="form-control"
                     required
+                    onChange={this.changeInput}
                     style={{ width: "auto", float: "left" }}
                   >
                     <option value="hide" disabled hidden>
@@ -275,12 +276,9 @@ class InvoicesChange extends React.Component {
     const value = e.target.value;
     const name = e.target.name;
 
-    this.setState({ [name]: value });
-  };
-
-  changeCustomer = e => {
-    const customerId = e.target.value;
-    this.props.changeInvoiceOnSelect(customerId);
+    this.setState({ [name]: value }, () => {
+      this.calcTotal();
+    });
   };
 
   convertCustProduct = () => {
@@ -333,13 +331,19 @@ class InvoicesChange extends React.Component {
   };
 
   calcTotal = () => {
-    const { addedProducts } = this.state;
+    const { addedProducts, discount } = this.state;
     const length = addedProducts.length;
     let total = 0;
 
     for (let i = 0; i < length; i++) {
       total += addedProducts[i].price * addedProducts[i].qty;
     }
+
+    if (parseInt(discount)) {
+      total = (total / 100) * (100 - parseInt(discount));
+    }
+
+    total = parseFloat(total.toFixed(2));
 
     if (this.props.invoice.total !== total) {
       this.setState({ oldTotal: this.props.invoice.total });

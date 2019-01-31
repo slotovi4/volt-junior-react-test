@@ -10,6 +10,7 @@ import {
 
 class InvoicesCreate extends React.Component {
   state = {
+    discount: 0,
     customerId: null,
     productId: null,
     discount: null,
@@ -42,6 +43,8 @@ class InvoicesCreate extends React.Component {
                   placeholder="Invoice discount..."
                   onChange={this.changeInput}
                   className="form-control"
+                  min={0}
+                  max={100}
                   required
                 />
               </div>
@@ -51,9 +54,9 @@ class InvoicesCreate extends React.Component {
                   <h5>Customer</h5>
                   <select
                     name="customerId"
-                    onChange={this.changeInput}
                     defaultValue="hide"
                     className="form-control"
+                    onChange={this.changeInput}
                     required
                   >
                     <option value="hide" hidden>
@@ -92,10 +95,10 @@ class InvoicesCreate extends React.Component {
                   <select
                     name="productId"
                     placeholder="Invoice product..."
-                    onChange={this.changeInput}
                     defaultValue="hide"
                     className="form-control"
                     style={{ width: "auto", float: "left" }}
+                    onChange={this.changeInput}
                     required
                   >
                     <option value="hide" hidden>
@@ -171,7 +174,9 @@ class InvoicesCreate extends React.Component {
     const value = e.target.value;
     const name = e.target.name;
 
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => {
+      this.calcTotal();
+    });
   };
 
   changeQty = (e, addedProduct) => {
@@ -187,13 +192,19 @@ class InvoicesCreate extends React.Component {
   };
 
   calcTotal = () => {
-    const { addedProducts } = this.state;
+    const { addedProducts, discount } = this.state;
     const length = addedProducts.length;
     let total = 0;
 
     for (let i = 0; i < length; i++) {
       total += addedProducts[i].price * addedProducts[i].qty;
     }
+
+    if (discount) {
+      total = (total / 100) * (100 - discount);
+    }
+
+    total = parseFloat(total.toFixed(2));
 
     this.setState({ total });
   };
