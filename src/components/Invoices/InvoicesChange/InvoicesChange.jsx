@@ -26,24 +26,30 @@ class InvoicesChange extends React.Component {
   async componentWillMount() {
     const { id } = this.props.match.params;
 
-    if (id) {
+    if (!isNaN(id)) {
       await this.props.getInvoice(parseInt(id));
       await this.props.getInvoiceItems(parseInt(id));
       await this.props.getAllCustomers();
       await this.props.getAllProducts();
 
-      // set state
-      this.setState({
-        discount: parseFloat(this.props.invoice.discount),
-        customerId: this.props.invoice.customer_id,
-        custProducts: this.props.invoiceItems,
-        total: this.props.invoice.total,
-        oldTotal: null,
-        notFoundProducts: []
-      });
+      if (!this.props.invoice || this.props.invoice === undefined) {
+        this.props.history.push("/err");
+      } else {
+        // set state
+        this.setState({
+          discount: parseFloat(this.props.invoice.discount),
+          customerId: this.props.invoice.customer_id,
+          custProducts: this.props.invoiceItems,
+          total: this.props.invoice.total,
+          oldTotal: null,
+          notFoundProducts: []
+        });
 
-      // convert products
-      this.convertCustProduct();
+        // convert products
+        this.convertCustProduct();
+      }
+    } else {
+      this.props.history.push("/err");
     }
   }
 
